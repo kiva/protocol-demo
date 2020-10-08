@@ -26,7 +26,6 @@ describe('Full system integration tests for mobile issue and verify flows', () =
             .post('/v2/mobile/connection')
             .expect(201)
             .expect((res) => {
-                console.log(res.body);
                 expect(res.body.invitation).toBeDefined();
                 expect(res.body.invitation.label).toBe('Civil Registry Office');
             });
@@ -44,7 +43,6 @@ describe('Full system integration tests for mobile issue and verify flows', () =
             .send(data)
             .expect(201)
             .expect((res) => {
-                console.log(res.body);
                 expect(res.body.connectionData).toBeDefined();
                 invitation = res.body.connectionData;
             });
