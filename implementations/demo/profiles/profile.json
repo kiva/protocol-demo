@@ -9,16 +9,13 @@
         "verkey": "je1pYZPgnPA2i3UMkKbZkW3oLVEftMobxfEcrCgpbZt"
     },
     "DEV": {
-        "did": "2MEMk5sErXBrXo82iAQdVE",
-        "verkey": "je1pYZPgnPA2i3UMkKbZkW3oLVEftMobxfEcrCgpbZt"
+        
     },
     "QA": {
-        "did": "JUiGETimM3zsE7AgC4s7Jd",
-        "verkey": "AXWRAG9hvQfN9xAGJxvn6gdHnExdCB7diLjbFpBB3D4a"
+       
     },
     "SAND": {
-        "did": "TmqUcxz4sXPrZpsgtq8dpi",
-        "verkey": "FbMCeQGqk72RASziZnuP8s22qX4CGATKW2niHxh6d3mF"
+
     },
     "PROD": {
 
