@@ -1,0 +1,47 @@
+{
+    "DEFAULT": {
+        "comment":"Unrestricted proof for the demo",
+        "proof_request":{
+            "name":"UnrestrictedDemo",
+            "version":"1.0",
+            "requested_attributes":{
+                "nationalId":{
+                    "name":"nationalId",
+                    "restrictions": []
+                },
+                "firstName":{
+                    "name":"firstName",
+                    "restrictions": []
+                },
+                "lastName":{
+                    "name":"lastName",
+                    "restrictions": []
+                },
+                "birthDate":{
+                    "name":"birthDate",
+                    "restrictions": []
+                },
+                "photo~attach":{
+                    "name":"photo~attach",
+                    "restrictions": []
+                }
+            },
+            "requested_predicates":{}
+        }
+    },
+    "LOCAL": {
+        
+    },
+    "DEV": {
+
+    },
+    "QA": {
+
+    },
+    "SAND": {
+
+    },
+    "PROD": {
+
+    }
+}
