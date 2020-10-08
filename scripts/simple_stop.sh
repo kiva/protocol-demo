@@ -1,0 +1,10 @@
+#!/bin/bash
+# Run from protocol-demo
+# Stops all the containers
+set -ev
+
+docker-compose -f implementations/demo/docker-compose.yml down
+# Stop all running agents
+docker stop $(docker ps -aq)
+docker-compose -f ../aries-guardianship-agency/docker-compose.yml down
+docker rm -f $(docker ps -aq)
