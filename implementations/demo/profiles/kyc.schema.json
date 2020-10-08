@@ -15,8 +15,8 @@
     },
     "LOCAL": {
         "schema_version": "1.0.0",
-        "schema_issuer_did": "Th7MpTaRZVRYnPiabds81Y",
-        "schema_id": "Th7MpTaRZVRYnPiabds81Y:2:Identity:1.0.0"
+        "schema_issuer_did": "EbP4aYNeTHL6q385GuVpRV",
+        "schema_id": "EbP4aYNeTHL6q385GuVpRV:2:Identity:1.0.0"
     },
     "DEV": {
 

@@ -38,7 +38,6 @@ describe('Full system integration tests for mobile issue and verify flows', () =
             walletId: 'walletIdMobile',
             walletKey: 'walletKeyMobile',
             adminApiKey: 'mobileApiKey',
-            adminApiPort: '5005',
         };
         return request(process.env.AGENCY_CONTROLLER_URL)
             .post('/v1/manager')
