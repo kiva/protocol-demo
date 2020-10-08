@@ -1,0 +1,49 @@
+{
+  "name": "integration_tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Integration tests for Kiva Protocol microservices",
+  "license": "none",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiva/protocol.git"
+  },
+  "scripts": {
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "lint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
+    "test:demo": "node -r dotenv/config node_modules/.bin/jest -f demo --runInBand"
+  },
+  "dependencies": {
+    "typescript": "^3.9.7"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.3",
+    "@types/supertest": "^2.0.10",
+    "dotenv": "^8.2.0",
+    "kill-port": "^1.6.1",
+    "jest": "^25.5.4",
+    "prettier": "^2.0.5",
+    "supertest": "^4.0.2",
+    "ts-jest": "^25.5.1",
+    "tsconfig-paths": "^3.9.0",
+    "tslint": "^6.1.3"
+  },
+  "jest": {
+    "globals": {
+      "factories": {}
+    },
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "test",
+    "testRegex": ".e2e-spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+}

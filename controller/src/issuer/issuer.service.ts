@@ -133,7 +133,7 @@ export class IssuerService {
      * TODO better error handling
      */
     private getCredDefAndSchemaData(credDefProfilePath: string) {
-        const prefix = __dirname + process.env.PROFILES_PATH;
+        const prefix = __dirname + '/' + process.env.PROFILES_PATH;
         const credDefProfileString = readFileSync(prefix + credDefProfilePath).toString();
         if (!credDefProfileString) {
             throw new Error(`Failed to load profile ${credDefProfilePath}`);

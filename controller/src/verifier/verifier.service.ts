@@ -27,7 +27,7 @@ export class VerifierService {
     }
 
     public async verify(proofProfilePath: string, connectionId: string) {
-        const prefix = __dirname + + process.env.PROFILES_PATH;
+        const prefix = __dirname + '/' + process.env.PROFILES_PATH;
         const proofProfileString = readFileSync(prefix + proofProfilePath).toString();
         if (!proofProfileString) {
             throw new Error(`Failed to load profile ${proofProfileString}`);
