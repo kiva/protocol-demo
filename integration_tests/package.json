@@ -12,7 +12,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "lint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
-    "test:demo": "node -r dotenv/config node_modules/.bin/jest -f demo --runInBand"
+    "test:simple": "node -r dotenv/config node_modules/.bin/jest -f simple --runInBand"
   },
   "dependencies": {
     "typescript": "^3.9.7"

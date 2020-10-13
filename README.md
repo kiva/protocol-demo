@@ -33,8 +33,6 @@ You can call this "protocol-all" if you like.  Unless, specified, always run com
     ```
     ./protocol-demo/scripts/dummy_env.sh
     ```
-    There are a few token values still needed which can be found here:  
-    [google doc](https://docs.google.com/document/d/1zpRvDuEpnbBiPN5JGVvBDujBUgSufGiKAf2AZd3azP8)  
 
 4. Run the following command, from the `home directory`, to get npm installs for each repo
     ```
@@ -51,7 +49,7 @@ You can call this "protocol-all" if you like.  Unless, specified, always run com
     ```
 
 ## Running the code (simple demo)
-1. Now that everything has been set up, go into the protocol-demo repo
+1. Now that all the various repos have been set up, go into the protocol-demo repo
    ```
    cd protocol-demo
    ```
@@ -63,6 +61,7 @@ You can call this "protocol-all" if you like.  Unless, specified, always run com
    ```
    cd integration_tests
    npm run test:simple
+   cd ..
    ```
 4. When down stop everything
    ```
