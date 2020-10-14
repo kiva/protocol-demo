@@ -1,6 +1,7 @@
 #!/bin/bash
 # Run from protocol-demo
-# Starts up all the containers needed for locally testing a simple system
+# Starts up all the containers needed for locally testing the full system
+# Note that sleep times are extra long to all everything spin up, there are efficency improvements we can make here
 set -ev
 
 docker-compose -f ../aries-guardianship-agency/docker-compose.yml up -d
@@ -12,5 +13,5 @@ sleep 15
 docker-compose -f ../protocol-gateway/docker-compose.yml up -d
 sleep 15
 docker-compose -f implementations/demo/docker-compose.yml up -d
-sleep 60
+sleep 75
 docker exec -it demo-controller ts-node -r dotenv/config /www/implementations/demo/scripts/setup.demo.simple.ts

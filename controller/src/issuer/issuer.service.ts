@@ -49,10 +49,9 @@ export class IssuerService {
         );
     }
 
-    public async issueCredential(credDefProfilePath: string, connectionId: string, entityId?: string, entityData?: any): Promise<string> {
+    public async issueCredential(credDefProfilePath: string, connectionId: string, entityData?: any): Promise<string> {
         const credentialData: any = this.getCredDefAndSchemaData(credDefProfilePath);
         credentialData.connection_id = connectionId;
-        entityData = entityData || await this.implementationService.fetchEntityData(entityId);
         const attributes = this.implementationService.formatDataForCredential(entityData);
         credentialData.credential_proposal.attributes = attributes;
         return await this.agentCaller.callAgent(
@@ -69,11 +68,8 @@ export class IssuerService {
      * Fetches data about the entity, enrolls them in the key guardian, and issues them a credential
      * TODO need to figure out rollbacks
      */
-    public async onboardEntity(credDefProfilePath: string, entityId: string) {
-        // Fetch entity data
-        const entityData = await this.implementationService.fetchEntityData(entityId);
-        Logger.log('Fetched entity data');
-        const keyGuardRes = await this.enrollInKeyGuardian(entityData);
+    public async onboardEntity(credDefProfilePath: string, entityData: any) {
+        const keyGuardRes = await this.enrollInKeyGuardianFingerprint(entityData);
         Logger.log('Enrolled in Key Guardian');
         const connectionRes = await this.agentService.acceptConnection(keyGuardRes.id, keyGuardRes.connectionData);
         Logger.log('Accepted connection invitation');
@@ -86,13 +82,31 @@ export class IssuerService {
         // TODO the ping is not really needed and can be removed eventually - useful for seeing where things are failing
         const pingRes = await this.agentService.sendPing(connectionId);
         Logger.log('Ping sent');
-        const issueCredRes = await this.issueCredential(credDefProfilePath, connectionId, entityId, entityData);
+        const issueCredRes = await this.issueCredential(credDefProfilePath, connectionId, entityData);
         Logger.log('Credential Issued');
         // TODO we may want to manually spin down the holder's agent and delete the connection
         // For now we just return the agent id
         return {
             agentId: keyGuardRes.id
         };
+    }
+
+    /**
+     * TODO we should be able to toggle between fingerprint, sms, both, etc
+     */
+    private async enrollInKeyGuardianFingerprint(entityData: any) {
+        // TODO when this is in it's own class inject the http service
+        const http = new ProtocolHttpService(new HttpService());
+        const data = await this.implementationService.formatDataForKeyGuardian(entityData);
+        const req: any = {
+            method: 'POST',
+            url: process.env.KEY_GUARDIAN_URL + '/v1/escrow/create', // TODO change to 'enroll'
+            data
+        };
+        Logger.log('Fingerprint entry created');
+        const res = await http.requestWithRetry(req);
+        const returnData = res.data;
+        return returnData;
     }
 
     /**

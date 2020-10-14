@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { DataService } from './data.service';
 import { MobileModule } from './mobile/mobile.module';
+import { KycModule } from './kyc/kyc.module';
 
 /**
  * TODO I shouldn't actually need to specific a module is there is no custom code
@@ -8,6 +9,7 @@ import { MobileModule } from './mobile/mobile.module';
 @Module({
     imports: [
         MobileModule,
+        KycModule,
     ],
     providers: [
         {
@@ -18,6 +20,7 @@ import { MobileModule } from './mobile/mobile.module';
     exports: [
         'IDataService',
         MobileModule,
+        KycModule
     ]
 })
 export class DemoModule {}
