@@ -30,6 +30,7 @@ export class KycController {
      */
     @Post('register')
     async register(@Body(new ProtocolValidationPipe()) body: any): Promise<any> {
-        return await this.issuerService.onboardEntity('demo.cred.def.json', body);
+        await this.issuerService.onboardEntity('demo.cred.def.json', body);
+        return { success: true };
     }
 }

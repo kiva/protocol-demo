@@ -53,7 +53,7 @@ export class DataService {
                 type_id: 1,
                 position: fingerprint.position,
                 missing_code: null,
-                capture_date: null,
+                capture_date: Date.now().toString(),
                 image: fingerprint.image,
             });
         }
