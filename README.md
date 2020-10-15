@@ -45,10 +45,11 @@ You can call this "protocol-all" if you like.  Unless, specified, always run com
 
 5. From the `home directory`, build all of the docker containers
     ```
-    ./protocol-demo/scripts/build.sh
+    ./protocol-demo/scripts/simple_build.sh
     ```
 
 ## Running the code (simple demo)
+The simple demo includes the minimum pieces to spin up agents and run through the issuing and verifying flows with them 
 1. Now that all the various repos have been set up, go into the protocol-demo repo
    ```
    cd protocol-demo
@@ -66,4 +67,34 @@ You can call this "protocol-all" if you like.  Unless, specified, always run com
 4. When down stop everything
    ```
    ./scripts/simple_stop.sh
+   ```
+
+## Running full stack demo
+The full stack demo includes the guardianship system which includes auth methods like fingerprints to control agents
+This requires some addition setup scripts
+1. First you need ensure you have java installed on your machine and then you can run the setup scripts. From the `home directory` run
+   ```
+   ./protocol-demo/scripts/java_setup.sh
+   ```
+2. You then need to build the full services
+   ```
+   ./protocol-demo/scripts/full_build.sh
+   ```
+3. Now go into the protocol-demo repo
+   ```
+   cd protocol-demo
+   ```
+4. Start up the full stack (and runs setup scripts) - this may take awhile and a lot of computer resources
+   ```
+   ./scripts/full_start.sh
+   ```
+5. Run tests
+   ```
+   cd integration_tests
+   npm run test
+   cd ..
+   ```
+6. When down stop everything
+   ```
+   ./scripts/full_stop.sh
    ```
