@@ -33,12 +33,11 @@ jobs:
       - run:
           name: Setup demo
           command: |
-            cp demo/dummy.env demo/.env
+            cp dummy.env .env
 
       - run:
           name: Start docker compose and wait for readiness
           command: |
-            cd demo
             docker-compose -f docker-compose.ci.yml build
             docker-compose -f docker-compose.ci.yml up -d
             sleep 20
@@ -54,12 +53,10 @@ jobs:
       - run:
           name: Setup integration tests
           command: |
-            cd demo
             npm install
       - run:
           name: Running demo integration tests
           command: |
-            cd demo
             if ! npm run test ; then
               echo "Tests failed. Server logs:";
               cd ..
