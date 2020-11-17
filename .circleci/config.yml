@@ -12,7 +12,7 @@ jobs:
             - run: npm install
             - run: npm run build
             - run: npm run lint
-            - run: npm test:local
+            - run: npm run test:local
 
   integration-test:
     machine:
@@ -57,7 +57,7 @@ jobs:
       - run:
           name: Running demo integration tests
           command: |
-            if ! npm run test ; then
+            if ! npm run test:integration ; then
               echo "Tests failed. Server logs:";
               cd ..
               docker-compose -f docker-compose.ci.yml logs;
