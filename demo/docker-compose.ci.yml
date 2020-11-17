@@ -1,0 +1,96 @@
+# Spin up the demo controller for development purposes
+#
+version: '3.5'
+
+networks:
+  agency-network:
+    name: agency-network
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        -
+          subnet: 10.0.0.0/24
+
+services:
+  indy-pool:
+    build:
+      context: .
+      dockerfile: resources/indy-pool.dockerfile
+      args:
+        pool_ip: '10.0.0.2'
+    image: indy-pool
+    container_name: indy-pool
+    working_dir: /home/indy
+    ports:
+      - "9701:9701"
+      - "9702:9702"
+      - "9703:9703"
+      - "9704:9704"
+      - "9705:9705"
+      - "9706:9706"
+      - "9707:9707"
+      - "9708:9708"
+    networks:
+      agency-network:
+        ipv4_address: 10.0.0.2
+
+  aries-guardianship-agency:
+    image: kivaprotocol/aries-guardianship-agency:0.0.25
+    container_name: aries-guardianship-agency
+    working_dir: /www
+    ports:
+        - "3010:3010"
+    expose:
+        - "3010"
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+        - agency-network
+    depends_on:
+        - indy-pool
+    tty: true
+    privileged: true
+    environment:
+        - NODE_ENV=LOCAL
+        - PUBLIC_URL=http://aries-guardianship-agency:3010
+        - WALLET_DB_HOST=protocol-identity-wallet-db
+        - WALLET_DB_PORT=5432
+        - WALLET_DB_USER=postgres
+        - WALLET_DB_PASS=dbpass
+        - WALLET_DB_ADMIN_USER=postgres
+        - WALLET_DB_ADMIN_PASS=dbpass
+
+  protocol-identity-wallet-db:
+    image: postgres:11
+    container_name: protocol-identity-wallet-db
+    command: postgres -c logging_collector=on -c log_destination=stderr
+    volumes:
+        - ./resources/identity_wallet:/docker-entrypoint-initdb.d/
+    networks:
+        - agency-network
+    depends_on:
+        - aries-guardianship-agency
+    tty: true
+    environment:
+        - POSTGRES_HOST=protocol-identity-wallet-db
+        - POSTGRES_DB=wallets
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=dbpass
+
+  demo-controller:
+      env_file:
+          - .env
+      build:
+          context: ../
+          dockerfile: demo/Dockerfile.production
+      image: demo-controller
+      container_name: demo-controller
+      working_dir: /www
+      ports:
+          - "3014:3014"
+      networks:
+          - agency-network
+      tty: true
+      depends_on: 
+        - indy-pool

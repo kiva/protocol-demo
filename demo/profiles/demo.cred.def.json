@@ -1,0 +1,53 @@
+{
+    "DEFAULT": {
+        "schema_name": "Identity",
+        "comment": "National ID card",
+        "credential_proposal": {
+            "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview"
+        },
+        "support_revocation": false,
+        "auto_remove": true,
+        "attributes": [
+            "nationalId",
+            "firstName",
+            "lastName",
+            "birthDate",
+            "photo~attach"
+        ]
+    },
+    "LOCAL": {
+        "issuer_did": "EbP4aYNeTHL6q385GuVpRV",
+        "tag": "tag",
+        "cred_def_id": "EbP4aYNeTHL6q385GuVpRV:3:CL:12:tag",
+        "schema_issuer_did": "EbP4aYNeTHL6q385GuVpRV",
+        "schema_version": "1.0.0",
+        "schema_id": "EbP4aYNeTHL6q385GuVpRV:2:Identity:1.0.0"
+    },
+    "DEV": {
+        "issuer_did": "2MEMk5sErXBrXo82iAQdVE",
+        "tag": "tag",
+        "cred_def_id": "2MEMk5sErXBrXo82iAQdVE:3:CL:13:tag",
+        "schema_issuer_did": "McP1XxbNgbWL1ZNgQQB9YL",
+        "schema_version": "1.0.27",
+        "schema_id": "McP1XxbNgbWL1ZNgQQB9YL:2:Identity:1.0.27"
+    },
+    "QA": {
+        "issuer_did": "JUiGETimM3zsE7AgC4s7Jd",
+        "tag": "tag",
+        "cred_def_id": "JUiGETimM3zsE7AgC4s7Jd:3:CL:13:tag",
+        "schema_issuer_did": "McP1XxbNgbWL1ZNgQQB9YL",
+        "schema_version": "1.0.27",
+        "schema_id": "McP1XxbNgbWL1ZNgQQB9YL:2:Identity:1.0.27"
+    },
+    "SAND": {
+        "issuer_did": "TmqUcxz4sXPrZpsgtq8dpi",
+        "tag": "tag",
+        "cred_def_id": "TmqUcxz4sXPrZpsgtq8dpi:3:CL:9:tag",
+        "schema_issuer_did": "3bymcHbJGvAG77FuAB3hZh",
+        "schema_version": "1.0.2",
+        "schema_id": "3bymcHbJGvAG77FuAB3hZh:2:Identity:1.0.2"
+    },
+    "PROD": {
+
+    }
+}
