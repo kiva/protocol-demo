@@ -9,7 +9,6 @@ import { StewardModule } from 'aries-controller/steward/steward.module';
 import { VerifierModule } from 'aries-controller/verifier/verifier.module';
 import { ApiModule } from 'aries-controller/api/api.module';
 import data from 'aries-controller/config/env.json';
-import { MobileModule } from '../mobile/mobile.module';
 
 /**
  * Pull the various modules from aries-controller, and adds in the modules specific for this controller (mobile)
@@ -23,7 +22,6 @@ import { MobileModule } from '../mobile/mobile.module';
         StewardModule,
         VerifierModule,
         ApiModule,
-        MobileModule,
     ],
     controllers: [AppController],
     providers: [AppService],
