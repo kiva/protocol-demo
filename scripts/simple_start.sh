@@ -4,7 +4,7 @@
 set -ev
 
 docker-compose -f ../aries-guardianship-agency/docker-compose.yml up -d
-sleep 10
+sleep 15
 docker-compose -f docker-compose.yml up -d
 sleep 25
-docker exec -it demo-controller ts-node -r dotenv/config /www/scripts/setup.demo.ts
+docker exec -it demo-controller npm run script:dev /www/src/scripts/setup.demo.ts

@@ -11,10 +11,12 @@
         "build": "tsc",
         "lint": "tslint -p tsconfig.json -c tslint.json",
         "lint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
-        "script:dev": "ts-node ",
+        "script:dev": "ts-node -r dotenv/config ",
         "start": "ts-node -r tsconfig-paths/register -r dotenv/config src/main.ts",
         "start:debug": "nodemon --legacy-watch",
-        "test": "node -r dotenv/config node_modules/.bin/jest --runInBand"
+        "test": "node -r dotenv/config node_modules/.bin/jest --runInBand",
+        "test:local": "node -r dotenv/config node_modules/.bin/jest --runInBand -f local",
+        "test:integration": "node -r dotenv/config node_modules/.bin/jest --runInBand -f integration"
     },
     "dependencies": {
         "@nestjs/common": "^7.4.2",

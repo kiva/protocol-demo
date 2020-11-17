@@ -11,7 +11,7 @@ services:
         env_file:
             - .env
         build:
-            context: ../../controller
+            context: .
             dockerfile: Dockerfile
         command: npm run start:debug
         image: demo-controller
@@ -20,8 +20,9 @@ services:
         ports:
             - "3014:3014"
         volumes:
-            - ../../controller/:/www
-            - ./:/www/implementations/demo
+            - ./:/www
+            # For dev purposes this simulates npm-link, since symbolic links on the mac won't work in the docker container
+            # - ../../../aries-controller/dist:/www/node_modules/aries-controller
         networks:
             - agency-network
         tty: true
