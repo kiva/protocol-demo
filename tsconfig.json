@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
     "declaration": true,
     "noImplicitAny": false,
     "removeComments": true,
@@ -8,7 +7,7 @@
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es6",
+    "target": "es5",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./src",
@@ -16,7 +15,6 @@
     "esModuleInterop": true
   },
   "include": [
-    "node_modules",
     "src/**/*"
   ],
   "exclude": [
