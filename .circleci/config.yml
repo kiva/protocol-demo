@@ -72,7 +72,7 @@ workflows:
               only: /.*/
       - integration-test:
           requires:
-            - build-test-publish
+            - build-and-test
           filters: # run for all branches AND tags
             tags:
               only: /.*/
