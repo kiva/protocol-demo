@@ -41,8 +41,12 @@ jobs:
           command: |
             docker-compose -f docker-compose.ci.yml build
             docker-compose -f docker-compose.ci.yml up -d
-            sleep 20
+            sleep 30
             docker-compose -f docker-compose.ci.yml logs
+      - run:
+          name: Setup integration tests
+          command: |
+            npm install
       - run:
           name: Run setup scripts
           command: |
@@ -51,10 +55,6 @@ jobs:
               docker-compose -f docker-compose.ci.yml logs;
               exit 1;
             fi
-      - run:
-          name: Setup integration tests
-          command: |
-            npm install
       - run:
           name: Running demo integration tests
           command: |
