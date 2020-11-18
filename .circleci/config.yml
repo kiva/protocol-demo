@@ -1,0 +1,83 @@
+version: 2.1
+
+jobs:
+  build-and-test:
+    executor:
+      name: node/default
+      tag: '8.12'
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: npm install
+            - run: npm run build
+            - run: npm run lint
+            - run: cp dummy.env .env
+            - run: npm run test:local
+
+  integration-test:
+    machine:
+      docker_layer_caching: true
+      image: ubuntu-1604:201903-01
+    steps:
+      - checkout
+      - run:
+          name: Setup shell environment
+          command: |
+            echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run:
+          name: Setup node
+          command: |
+              nvm install v8.17.0
+              node -v
+              nvm alias default v8.17.0
+      - run:
+          name: Setup demo
+          command: |
+            cp dummy.env .env
+            docker pull bcgovimages/aries-cloudagent:py36-1.15-0_0.5.4
+      - run:
+          name: Start docker compose and wait for readiness
+          command: |
+            docker-compose -f docker-compose.ci.yml build
+            docker-compose -f docker-compose.ci.yml up -d
+            sleep 30
+            docker-compose -f docker-compose.ci.yml logs
+      - run:
+          name: Setup integration tests
+          command: |
+            npm install
+      - run:
+          name: Run setup scripts
+          command: |
+            if ! docker exec -it demo-controller node /www/scripts/setup.demo.js ; then
+              echo "Setup failed. Server logs:";
+              docker-compose -f docker-compose.ci.yml logs;
+              exit 1;
+            fi
+      - run:
+          name: Running demo integration tests
+          command: |
+            if ! npm run test:integration ; then
+              echo "Tests failed. Server logs:";
+              cd ..
+              docker-compose -f docker-compose.ci.yml logs;
+              exit 1;
+            fi
+workflows:
+  build-test-deploy:
+    jobs:
+      - build-and-test:
+          filters: # run for all branches AND tags
+            tags:
+              only: /.*/
+      - integration-test:
+          requires:
+            - build-and-test
+          filters: # run for all branches AND tags
+            tags:
+              only: /.*/
+
+orbs:
+  node: circleci/node@1.1.6
+  docker: circleci/docker@1.3.0

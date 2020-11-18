@@ -1,0 +1,39 @@
+{
+    "DEFAULT": {
+        "schema_name": "Identity",
+        "comment": "Identity schema for demo",
+        "credential_proposal": {
+            "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview"
+        },
+        "attributes": [
+            "nationalId",
+            "firstName",
+            "lastName",
+            "birthDate",
+            "photo~attach"
+        ]
+    },
+    "LOCAL": {
+        "schema_version": "1.0.0",
+        "schema_issuer_did": "EbP4aYNeTHL6q385GuVpRV",
+        "schema_id": "EbP4aYNeTHL6q385GuVpRV:2:Identity:1.0.0"
+    },
+    "DEV": {
+        "schema_version": "1.0.27",
+        "schema_issuer_did": "McP1XxbNgbWL1ZNgQQB9YL",
+        "schema_id": "McP1XxbNgbWL1ZNgQQB9YL:2:Identity:1.0.27"
+    },
+    "QA": {
+        "schema_version": "1.0.27",
+        "schema_issuer_did": "McP1XxbNgbWL1ZNgQQB9YL",
+        "schema_id": "McP1XxbNgbWL1ZNgQQB9YL:2:Identity:1.0.27"
+    },
+    "SAND": {
+        "schema_version": "1.0.2",
+        "schema_issuer_did": "3bymcHbJGvAG77FuAB3hZh",
+        "schema_id": "3bymcHbJGvAG77FuAB3hZh:2:Identity:1.0.2"
+    },
+    "PROD": {
+
+    }
+}

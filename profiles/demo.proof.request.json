@@ -1,0 +1,164 @@
+{
+    "DEFAULT": {
+        "comment":"Proof for the demo"
+    },
+    "LOCAL": {
+        "proof_request":{
+            "name":"Demo",
+            "version":"1.0",
+            "requested_attributes":{
+                "nationalId":{
+                    "name":"nationalId",
+                    "restrictions": [{
+                        "issuer_did":"EbP4aYNeTHL6q385GuVpRV"
+                    }]
+                },
+                "firstName":{
+                    "name":"firstName",
+                    "restrictions": [{
+                        "issuer_did":"EbP4aYNeTHL6q385GuVpRV"
+                    }]
+                },
+                "lastName":{
+                    "name":"lastName",
+                    "restrictions": [{
+                        "issuer_did":"EbP4aYNeTHL6q385GuVpRV"
+                    }]
+                },
+                "birthDate":{
+                    "name":"birthDate",
+                    "restrictions": [{
+                        "issuer_did":"EbP4aYNeTHL6q385GuVpRV"
+                    }]
+                },
+                "photo~attach":{
+                    "name":"photo~attach",
+                    "restrictions": [{
+                        "issuer_did":"EbP4aYNeTHL6q385GuVpRV"
+                    }]
+                }
+            },
+            "requested_predicates":{}
+        }
+    },
+    "DEV": {
+        "proof_request":{
+            "name":"Demo",
+            "version":"1.0",
+            "requested_attributes":{
+                "nationalId":{
+                    "name":"nationalId",
+                    "restrictions": [{
+                        "issuer_did":"2MEMk5sErXBrXo82iAQdVE"
+                    }]
+                },
+                "firstName":{
+                    "name":"firstName",
+                    "restrictions": [{
+                        "issuer_did":"2MEMk5sErXBrXo82iAQdVE"
+                    }]
+                },
+                "lastName":{
+                    "name":"lastName",
+                    "restrictions": [{
+                        "issuer_did":"2MEMk5sErXBrXo82iAQdVE"
+                    }]
+                },
+                "birthDate":{
+                    "name":"birthDate",
+                    "restrictions": [{
+                        "issuer_did":"2MEMk5sErXBrXo82iAQdVE"
+                    }]
+                },
+                "photo~attach":{
+                    "name":"photo~attach",
+                    "restrictions": [{
+                        "issuer_did":"2MEMk5sErXBrXo82iAQdVE"
+                    }]
+                }
+            },
+            "requested_predicates":{}
+        }
+    },
+    "QA": {
+        "proof_request":{
+            "name":"Demo",
+            "version":"1.0",
+            "requested_attributes":{
+                "nationalId":{
+                    "name":"nationalId",
+                    "restrictions": [{
+                        "issuer_did":"JUiGETimM3zsE7AgC4s7Jd"
+                    }]
+                },
+                "firstName":{
+                    "name":"firstName",
+                    "restrictions": [{
+                        "issuer_did":"JUiGETimM3zsE7AgC4s7Jd"
+                    }]
+                },
+                "lastName":{
+                    "name":"lastName",
+                    "restrictions": [{
+                        "issuer_did":"JUiGETimM3zsE7AgC4s7Jd"
+                    }]
+                },
+                "birthDate":{
+                    "name":"birthDate",
+                    "restrictions": [{
+                        "issuer_did":"JUiGETimM3zsE7AgC4s7Jd"
+                    }]
+                },
+                "photo~attach":{
+                    "name":"photo~attach",
+                    "restrictions": [{
+                        "issuer_did":"JUiGETimM3zsE7AgC4s7Jd"
+                    }]
+                }
+            },
+            "requested_predicates":{}
+        }
+    },
+    "SAND": {
+        "proof_request":{
+            "name":"Demo",
+            "version":"1.0",
+            "requested_attributes":{
+                "nationalId":{
+                    "name":"nationalId",
+                    "restrictions": [{
+                        "issuer_did":"TmqUcxz4sXPrZpsgtq8dpi"
+                    }]
+                },
+                "firstName":{
+                    "name":"firstName",
+                    "restrictions": [{
+                        "issuer_did":"TmqUcxz4sXPrZpsgtq8dpi"
+                    }]
+                },
+                "lastName":{
+                    "name":"lastName",
+                    "restrictions": [{
+                        "issuer_did":"TmqUcxz4sXPrZpsgtq8dpi"
+                    }]
+                },
+                "birthDate":{
+                    "name":"birthDate",
+                    "restrictions": [{
+                        "issuer_did":"TmqUcxz4sXPrZpsgtq8dpi"
+                    }]
+                },
+                "photo~attach":{
+                    "name":"photo~attach",
+                    "restrictions": [{
+                        "issuer_did":"TmqUcxz4sXPrZpsgtq8dpi"
+                    }]
+                }
+            },
+            "requested_predicates":{}
+        }
+    },
+    "PROD": {
+
+    }
+}

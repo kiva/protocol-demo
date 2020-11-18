@@ -1,0 +1,69 @@
+{
+    "name": "demo-controller",
+    "version": "1.0.0",
+    "description": "Demo controller",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kiva/protocol-aries.git"
+    },
+    "scripts": {
+        "build": "tsc",
+        "lint": "tslint -p tsconfig.json -c tslint.json",
+        "lint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
+        "script:dev": "ts-node -r dotenv/config ",
+        "start": "ts-node -r tsconfig-paths/register -r dotenv/config src/main.ts",
+        "start:debug": "nodemon --legacy-watch",
+        "test": "node -r dotenv/config node_modules/.bin/jest --runInBand",
+        "test:local": "node -r dotenv/config node_modules/.bin/jest --runInBand -f local",
+        "test:integration": "node -r dotenv/config node_modules/.bin/jest --runInBand -f integration"
+    },
+    "dependencies": {
+        "@nestjs/common": "^7.4.2",
+        "@nestjs/core": "^7.4.2",
+        "@nestjs/swagger": "^4.6.0",
+        "aries-controller": "^1.0.3",
+        "class-transformer": "^0.3.1",
+        "dotenv": "^8.2.0",
+        "protocol-common": "0.1.22"
+    },
+    "devDependencies": {
+        "@nestjs/testing": "^7.4.2",
+        "@types/jest": "^25.2.3",
+        "@types/supertest": "^2.0.10",
+        "jest": "^25.5.4",
+        "nodemon": "^2.0.4",
+        "ts-jest": "^25.5.1",
+        "ts-node": "^8.10.2",
+        "tsconfig-paths": "^3.9.0",
+        "tslint": "^6.1.3"
+    },
+    "jest": {
+        "globals": {
+            "factories": {}
+        },
+        "moduleFileExtensions": [
+            "js",
+            "json",
+            "ts"
+        ],
+        "rootDir": "test",
+        "testRegex": ".e2e-spec.ts$",
+        "transform": {
+            "^.+\\.(t|j)s$": "ts-jest"
+        },
+        "coverageDirectory": "../coverage",
+        "testEnvironment": "node"
+    },
+    "nodemonConfig": {
+        "watch": [
+            "src",
+            "implementations"
+        ],
+        "ext": "ts",
+        "ignore": [
+            "src/**/*.spec.ts"
+        ],
+        "exec": "ts-node -r tsconfig-paths/register -r dotenv/config src/main.ts"
+    }
+}
