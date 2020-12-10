@@ -16,8 +16,8 @@
         "start": "ts-node -r tsconfig-paths/register -r dotenv/config src/main.ts",
         "start:debug": "nodemon --legacy-watch",
         "test": "node -r dotenv/config node_modules/.bin/jest --runInBand",
-        "test:local": "node -r dotenv/config node_modules/.bin/jest --runInBand -f local",
-        "test:integration": "node -r dotenv/config node_modules/.bin/jest --runInBand -f integration"
+        "test:local": "node -r dotenv/config node_modules/.bin/jest --runInBand -- local",
+        "test:integration": "node -r dotenv/config node_modules/.bin/jest --runInBand -- integration"
     },
     "dependencies": {
         "@nestjs/common": "~7.5.5",
