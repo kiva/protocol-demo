@@ -23,7 +23,7 @@
         "@nestjs/common": "~7.5.5",
         "@nestjs/core": "~7.5.5",
         "@nestjs/swagger": "^4.7.5",
-        "aries-controller": "^1.0.10",
+        "aries-controller": "1.0.13",
         "class-transformer": "^0.3.1",
         "dotenv": "^8.2.0",
         "protocol-common": "0.1.24"
