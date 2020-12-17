@@ -75,6 +75,20 @@ workflows:
           filters: # run for all branches AND tags
             tags:
               only: /.*/
+      - docker/publish:
+          requires:
+              - build-and-test
+              - integration-test
+          filters: # only run for semver tagged versions
+              tags:
+                  only: /^([0-9]+)\.([0-9]+)\.([0-9]+)/
+              branches:
+                  ignore: /.*/
+          update-description: true
+          docker-context: implementations/demo
+          dockerfile: implementations/demo/Dockerfile.production
+          image: kivaprotocol/demo-controller
+          tag: << pipeline.git.tag >>
 
 orbs:
   node: circleci/node@4.1.0
