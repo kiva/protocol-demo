@@ -85,8 +85,7 @@ workflows:
               branches:
                   ignore: /.*/
           update-description: true
-          docker-context: implementations/demo
-          dockerfile: implementations/demo/Dockerfile.production
+          dockerfile: Dockerfile.production
           image: kivaprotocol/demo-controller
           tag: << pipeline.git.tag >>
 
