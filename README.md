@@ -3,12 +3,14 @@
 This is the top level repo that external developers can use to launch full implementations (eg demo) locally on their machines
 
 ### Pre-setup
-You will need git, docker, docker-compose, npm, nodejs and java installed on your machine.
+You will need the following installed, the version numbers are just suggestions:  
+git (2.24), docker (20.10), docker-compose (1.27), npm (6.14), nodejs (14.15), java (11)
 
 For docker, we recommend increasing its allocated resources to:
 - CPUs: 8
 - Memory: 6 GB
 - Swap: 2 GB
+For docker [docs](https://docs.docker.com/docker-for-mac/)
 
 ### Notes
 We will be referencing the following github repos several times.  Here's the links:  
@@ -60,9 +62,7 @@ The simple demo includes the minimum pieces to spin up agents and run through th
    ```
 3. Run tests
    ```
-   cd integration_tests
    npm run test:simple
-   cd ..
    ```
 4. When down stop everything
    ```
@@ -90,9 +90,7 @@ This requires some addition setup scripts
    ```
 5. Run tests
    ```
-   cd integration_tests
    npm run test
-   cd ..
    ```
 6. When down stop everything
    ```
