@@ -43,7 +43,7 @@ You can call this "protocol-all" if you like.  Unless, specified, always run com
     ```
     Note: if this is your first time you'll need to manually pull the latest bcgov image:
     ```
-    docker pull bcgovimages/aries-cloudagent:py36-1.15-0_0.5.4
+    docker pull bcgovimages/aries-cloudagent:py36-1.15-1_0.6.0
     ```
 
 5. From the `home directory`, build all of the docker containers
