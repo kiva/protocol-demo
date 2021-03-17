@@ -20,21 +20,21 @@
         "test:integration": "node -r dotenv/config node_modules/.bin/jest --runInBand -- integration"
     },
     "dependencies": {
-        "@nestjs/common": "^7.6.13",
-        "@nestjs/core": "^7.6.13",
-        "@nestjs/swagger": "^4.7.15",
-        "aries-controller": "1.0.25",
+        "@nestjs/common": "^7.6.14",
+        "@nestjs/core": "^7.6.14",
+        "@nestjs/swagger": "^4.7.16",
+        "aries-controller": "1.0.31",
         "class-transformer": "^0.4.0",
         "dotenv": "^8.2.0",
-        "protocol-common": "0.1.30"
+        "protocol-common": "0.1.31"
     },
     "devDependencies": {
-        "@nestjs/testing": "^7.6.13",
+        "@nestjs/testing": "^7.6.14",
         "@types/jest": "^26.0.20",
         "@types/supertest": "^2.0.10",
         "jest": "^26.6.3",
         "nodemon": "^2.0.7",
-        "ts-jest": "^26.5.2",
+        "ts-jest": "^26.5.4",
         "ts-node": "^9.1.1",
         "tsconfig-paths": "^3.9.0",
         "tslint": "^6.1.3"
