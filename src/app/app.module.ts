@@ -9,6 +9,8 @@ import { StewardModule } from 'aries-controller/steward/steward.module';
 import { VerifierModule } from 'aries-controller/verifier/verifier.module';
 import { ApiModule } from 'aries-controller/api/api.module';
 import data from 'aries-controller/config/env.json';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from 'protocol-common/logging.interceptor';
 
 /**
  * Pull the various modules from aries-controller, and adds in the modules specific for this controller (mobile)
@@ -24,7 +26,13 @@ import data from 'aries-controller/config/env.json';
         ApiModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [
+        AppService,
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: LoggingInterceptor
+        }
+    ],
     exports: []
 })
 export class AppModule {}
