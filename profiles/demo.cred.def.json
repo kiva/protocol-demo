@@ -17,31 +17,31 @@
     },
     "LOCAL": {
         "issuer_did": "EbP4aYNeTHL6q385GuVpRV",
-        "tag": "tag",
+        "tag": "tag1",
         "schema_issuer_did": "EbP4aYNeTHL6q385GuVpRV",
         "schema_version": "1.0.0",
         "schema_id": "EbP4aYNeTHL6q385GuVpRV:2:Identity:1.0.0"
     },
     "DEV": {
         "issuer_did": "2MEMk5sErXBrXo82iAQdVE",
-        "tag": "tag",
-        "schema_issuer_did": "McP1XxbNgbWL1ZNgQQB9YL",
-        "schema_version": "1.0.27",
-        "schema_id": "McP1XxbNgbWL1ZNgQQB9YL:2:Identity:1.0.27"
+        "tag": "tag1",
+        "schema_issuer_did": "2MEMk5sErXBrXo82iAQdVE",
+        "schema_version": "1.0.0",
+        "schema_id": "2MEMk5sErXBrXo82iAQdVE:2:Identity:1.0.0"
     },
     "QA": {
         "issuer_did": "JUiGETimM3zsE7AgC4s7Jd",
-        "tag": "tag",
-        "schema_issuer_did": "McP1XxbNgbWL1ZNgQQB9YL",
-        "schema_version": "1.0.27",
-        "schema_id": "McP1XxbNgbWL1ZNgQQB9YL:2:Identity:1.0.27"
+        "tag": "tag1qa",
+        "schema_issuer_did": "JUiGETimM3zsE7AgC4s7Jd",
+        "schema_version": "1.0.0",
+        "schema_id": "JUiGETimM3zsE7AgC4s7Jd:2:Identity:1.0.0"
     },
     "SAND": {
         "issuer_did": "TmqUcxz4sXPrZpsgtq8dpi",
-        "tag": "tag",
-        "schema_issuer_did": "3bymcHbJGvAG77FuAB3hZh",
-        "schema_version": "1.0.2",
-        "schema_id": "3bymcHbJGvAG77FuAB3hZh:2:Identity:1.0.2"
+        "tag": "tag1",
+        "schema_issuer_did": "TmqUcxz4sXPrZpsgtq8dpi",
+        "schema_version": "1.0.0",
+        "schema_id": "TmqUcxz4sXPrZpsgtq8dpi:2:Identity:1.0.0"
     },
     "PROD": {
 
