@@ -24,21 +24,21 @@
     },
     "DEV": {
         "issuer_did": "2MEMk5sErXBrXo82iAQdVE",
-        "tag": "tag1",
+        "tag": "tag2",
         "schema_issuer_did": "2MEMk5sErXBrXo82iAQdVE",
         "schema_version": "1.0.0",
         "schema_id": "2MEMk5sErXBrXo82iAQdVE:2:Identity:1.0.0"
     },
     "QA": {
         "issuer_did": "JUiGETimM3zsE7AgC4s7Jd",
-        "tag": "tag1qa",
+        "tag": "tag2qa",
         "schema_issuer_did": "JUiGETimM3zsE7AgC4s7Jd",
         "schema_version": "1.0.0",
         "schema_id": "JUiGETimM3zsE7AgC4s7Jd:2:Identity:1.0.0"
     },
     "SAND": {
         "issuer_did": "TmqUcxz4sXPrZpsgtq8dpi",
-        "tag": "tag1",
+        "tag": "tag2",
         "schema_issuer_did": "TmqUcxz4sXPrZpsgtq8dpi",
         "schema_version": "1.0.0",
         "schema_id": "TmqUcxz4sXPrZpsgtq8dpi:2:Identity:1.0.0"
