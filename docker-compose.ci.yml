@@ -19,8 +19,6 @@ services:
         networks:
             - agency-network
         tty: true
-        depends_on: 
-            - indy-pool
         environment:
             - NODE_ENV=LOCAL
             - MULTI_AGENT=true
