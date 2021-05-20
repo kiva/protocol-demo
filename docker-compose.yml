@@ -1,4 +1,4 @@
-# Docker compose to spin up the demo controller
+# Docker compose to spin up the demo controller for development
 #
 version: '3.5'
 
@@ -8,8 +8,6 @@ networks:
 
 services:
     demo-controller:
-        env_file:
-            - .env
         build:
             context: .
             dockerfile: Dockerfile
@@ -22,7 +20,14 @@ services:
         volumes:
             - ./:/www
             # For dev purposes this simulates npm-link, since symbolic links on the mac won't work in the docker container
-            # - ../aries-controller/dist:/www/node_modules/aries-controller
+            - ../aries-controller/dist:/www/node_modules/aries-controller
         networks:
             - agency-network
         tty: true
+        environment:
+            - NODE_ENV=LOCAL
+            - MULTI_AGENT=false
+            - MULTI_CONTROLLER=true
+            - PORT=3014
+            - SELF_URL=http://demo-controller:3014
+            - ADMIN_API_KEY=adminApiKey

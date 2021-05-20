@@ -38,6 +38,81 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
             });
     });
 
+    it('Register demo agent in multi controller', async () => {
+        const data = {
+            "walletId": "demoWalletId",
+            "walletKey": "demoWalletKey",
+            "seed": "000000000000000000000000Steward2",
+            "label": "Demo Controller",
+            "useTailsServer": false,
+            "agentId": "demoAgent",
+            "adminApiKey": "demoAdminApiKey"
+        }
+        return request(demoUrl)
+            .post('/v1/agent/register')
+            .set('agent', 'demoAgent')
+            .send(data)
+            .expect((res) => {
+                expect(res.status).toBe(201);
+                expect(res.body.agentId).toBeDefined();
+            });
+    });
+
+    it('Demo agent publicizes DID', async () => {
+        await ProtocolUtility.delay(5000);
+        const data = {
+            "did": "EbP4aYNeTHL6q385GuVpRV",
+        };
+        return request(demoUrl)
+            .post('/v1/agent/publicize-did')
+            .set('agent', 'demoAgent')
+            .send(data)
+            .expect(201)
+            .expect((res) => {
+                expect(res.body.result).toBeDefined();
+            });
+    });
+
+    it('Demo agent creates schema', async () => {
+        await ProtocolUtility.delay(1000);
+        const data = {
+            "schema_name": "Identity",
+            "schema_version": "1.0.0",
+            "attributes": [
+                "nationalId",
+                "firstName",
+                "lastName",
+                "birthDate",
+                "photo~attach"
+            ]
+        };
+        return request(demoUrl)
+            .post('/v1/steward/schema')
+            .set('agent', 'demoAgent')
+            .send(data)
+            .expect(201)
+            .expect((res) => {
+                expect(res.body.schema_id).toBeDefined();
+            });
+    });
+
+    it('Demo agent creates cred def', async () => {
+        await ProtocolUtility.delay(1000);
+        const data = {
+            "schema_id": "EbP4aYNeTHL6q385GuVpRV:2:Identity:1.0.0",
+            "tag": "tag1",
+            "support_revocation": false
+        };
+        return request(demoUrl)
+            .post('/v1/issuer/cred-def')
+            .set('agent', 'demoAgent')
+            .send(data)
+            .expect(201)
+            .expect((res) => {
+                expect(res.body.credential_definition_id).toBeDefined();
+            });
+    });
+
     it('Demo agent connects to test agent', async () => {
         await ProtocolUtility.delay(1000);
         const data = {
@@ -46,6 +121,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         };
         return request(demoUrl)
             .post('/v1/agent/accept-connection')
+            .set('agent', 'demoAgent')
             .send(data)
             .expect(201)
             .expect((res) => {
@@ -58,6 +134,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         await ProtocolUtility.delay(3000);
         return request(demoUrl)
             .get(`/v2/api/connection/${demoConnectionId}`)
+            .set('agent', 'demoAgent')
             .expect(200)
             .expect((res) => {
                 expect(res.body.state).toBe('response');
@@ -79,6 +156,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         };
         return request(demoUrl)
             .post('/v2/api/issue')
+            .set('agent', 'demoAgent')
             .send(issueData)
             .expect((res) => {
                 try {
@@ -101,6 +179,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         };
         return request(demoUrl)
             .post(`/v2/api/verify`)
+            .set('agent', 'demoAgent')
             .send(data)
             .expect((res) => {
                 try {
@@ -119,6 +198,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         await ProtocolUtility.delay(5000);
         return request(demoUrl)
             .get(`/v2/api/verify/${presExId}`)
+            .set('agent', 'demoAgent')
             .expect(200)
             .expect((res) => {
                 expect(res.body.state).toBe('verified');
