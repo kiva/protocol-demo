@@ -38,6 +38,8 @@ jobs:
           name: Start docker compose and wait for readiness
           command: |
             docker-compose -f docker-compose.ci.yml build
+            docker-compose -f docker-compose.dep.yml up -d
+            sleep 30
             docker-compose -f docker-compose.ci.yml up -d
             sleep 30
             docker-compose -f docker-compose.ci.yml logs
@@ -46,19 +48,12 @@ jobs:
           command: |
             npm install
       - run:
-          name: Run setup scripts
-          command: |
-            if ! docker exec -it demo-controller node /www/scripts/setup.demo.js ; then
-              echo "Setup failed. Server logs:";
-              docker-compose -f docker-compose.ci.yml logs;
-              exit 1;
-            fi
-      - run:
           name: Running demo integration tests
           command: |
             if ! npm run test:integration ; then
               echo "Tests failed. Server logs:";
               cd ..
+              docker-compose -f docker-compose.dep.yml logs;
               docker-compose -f docker-compose.ci.yml logs;
               exit 1;
             fi
