@@ -45,12 +45,12 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
             "seed": "000000000000000000000000Steward2",
             "label": "Demo Controller",
             "useTailsServer": false,
-            "agentId": "demoAgent",
+            "agentId": "demo-agent",
             "adminApiKey": "demoAdminApiKey"
         }
         return request(demoUrl)
             .post('/v1/agent/register')
-            .set('agent', 'demoAgent')
+            .set('agent', 'demo-agent')
             .send(data)
             .expect((res) => {
                 expect(res.status).toBe(201);
@@ -65,7 +65,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         };
         return request(demoUrl)
             .post('/v1/agent/publicize-did')
-            .set('agent', 'demoAgent')
+            .set('agent', 'demo-agent')
             .send(data)
             .expect(201)
             .expect((res) => {
@@ -88,7 +88,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         };
         return request(demoUrl)
             .post('/v1/steward/schema')
-            .set('agent', 'demoAgent')
+            .set('agent', 'demo-agent')
             .send(data)
             .expect(201)
             .expect((res) => {
@@ -105,7 +105,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         };
         return request(demoUrl)
             .post('/v1/issuer/cred-def')
-            .set('agent', 'demoAgent')
+            .set('agent', 'demo-agent')
             .send(data)
             .expect(201)
             .expect((res) => {
@@ -121,7 +121,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         };
         return request(demoUrl)
             .post('/v1/agent/accept-connection')
-            .set('agent', 'demoAgent')
+            .set('agent', 'demo-agent')
             .send(data)
             .expect(201)
             .expect((res) => {
@@ -134,7 +134,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         await ProtocolUtility.delay(3000);
         return request(demoUrl)
             .get(`/v2/api/connection/${demoConnectionId}`)
-            .set('agent', 'demoAgent')
+            .set('agent', 'demo-agent')
             .expect(200)
             .expect((res) => {
                 expect(res.body.state).toBe('response');
@@ -156,7 +156,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         };
         return request(demoUrl)
             .post('/v2/api/issue')
-            .set('agent', 'demoAgent')
+            .set('agent', 'demo-agent')
             .send(issueData)
             .expect((res) => {
                 try {
@@ -179,7 +179,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         };
         return request(demoUrl)
             .post(`/v2/api/verify`)
-            .set('agent', 'demoAgent')
+            .set('agent', 'demo-agent')
             .send(data)
             .expect((res) => {
                 try {
@@ -198,7 +198,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         await ProtocolUtility.delay(5000);
         return request(demoUrl)
             .get(`/v2/api/verify/${presExId}`)
-            .set('agent', 'demoAgent')
+            .set('agent', 'demo-agent')
             .expect(200)
             .expect((res) => {
                 expect(res.body.state).toBe('verified');
