@@ -32,7 +32,6 @@ jobs:
       - run:
           name: Setup demo
           command: |
-            cp dummy.env .env
             docker pull bcgovimages/aries-cloudagent:py36-1.15-1_0.6.0
       - run:
           name: Start docker compose and wait for readiness
