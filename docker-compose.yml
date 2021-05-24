@@ -20,7 +20,7 @@ services:
         volumes:
             - ./:/www
             # For dev purposes this simulates npm-link, since symbolic links on the mac won't work in the docker container
-            - ../aries-controller/dist:/www/node_modules/aries-controller
+            #- ../aries-controller/dist:/www/node_modules/aries-controller
         networks:
             - agency-network
         tty: true
