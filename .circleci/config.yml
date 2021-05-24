@@ -42,6 +42,7 @@ jobs:
             sleep 30
             docker-compose -f docker-compose.ci.yml up -d
             sleep 30
+            docker-compose -f docker-compose.dep.yml logs
             docker-compose -f docker-compose.ci.yml logs
       - run:
           name: Setup integration tests

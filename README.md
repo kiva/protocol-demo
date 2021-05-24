@@ -63,7 +63,7 @@ The simple demo includes the minimum pieces to spin up agents and run through th
    ```
 3. Run tests
    ```
-   npm run test:simple
+   npm run test
    ```
 4. When down stop everything
    ```
