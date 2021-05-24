@@ -21,7 +21,7 @@ services:
         tty: true
         environment:
             - NODE_ENV=LOCAL
-            - MULTI_AGENT=true
+            - MULTI_AGENT=false
             - MULTI_CONTROLLER=true
             - PORT=3014
             - SELF_URL=http://demo-controller:3014
