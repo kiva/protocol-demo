@@ -10,7 +10,6 @@ jobs:
       - run: npm install
       - run: npm run lint
       - run: npm run build
-      - run: cp dummy.env .env
       - run: npm run test:local
 
   integration-test:
