@@ -80,7 +80,7 @@ workflows:
           update-description: true
           dockerfile: Dockerfile.production
           image: kivaprotocol/demo-controller
-          tag: << pipeline.git.tag >>
+          tag: << pipeline.git.tag >>,latest
 
 orbs:
   node: circleci/node@4.1.0
