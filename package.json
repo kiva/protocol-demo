@@ -26,6 +26,8 @@
         "aries-controller": "1.0.60",
         "class-transformer": "^0.4.0",
         "dotenv": "^8.2.0",
+        "glob-parent": "^5.1.2",
+        "normalize-url": "^4.5.1",
         "protocol-common": "0.1.38"
     },
     "devDependencies": {
