@@ -53,7 +53,7 @@ services:
             - POSTGRES_PASSWORD=dbpass
 
     aries-guardianship-agency:
-        image: kivaprotocol/aries-guardianship-agency:0.0.37
+        image: kivaprotocol/aries-guardianship-agency:latest
         container_name: dc-aries-guardianship-agency
         working_dir: /www
         ports:
