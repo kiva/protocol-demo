@@ -14,4 +14,4 @@ docker-compose -f ../protocol-gateway/docker-compose.yml up -d
 sleep 15
 docker-compose -f docker-compose.yml up -d
 sleep 75
-docker exec -it demo-controller npm run script:dev /www/src/scripts/setup.demo.ts
+docker exec -it demo-controller node /www/dist/scripts/setup.demo.js

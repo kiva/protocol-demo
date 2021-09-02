@@ -10,8 +10,7 @@ import { readFileSync } from 'fs';
  * TODO make robust to different existing states
  *
  * Currently this requires 2 different ways of running for dev and prod - eventually we should get this working in both
- *   Dev : docker exec -it demo-controller npm run script:dev /www/src/scripts/setup.demo.ts
- *   Prod: docker exec -it demo-controller node /www/scripts/setup.demo.js
+ *   docker exec -it demo-controller node /www/dist/scripts/setup.demo.ts
  */
 class SetupDemo {
 
@@ -45,6 +44,9 @@ class SetupDemo {
             url: this.selfUrl + '/v1/agent/publicize-did',
             data: {
                 did: profile.did
+            },
+            headers: {
+                agent: profile.agent_id
             }
         });
         Logger.log(res.data);
@@ -54,7 +56,10 @@ class SetupDemo {
         res = await this.http.requestWithRetry({
             method: 'POST',
             url: this.selfUrl + '/v1/steward/schema',
-            data: schema
+            data: schema,
+            headers: {
+                agent: profile.agent_id
+            }
         });
         Logger.log(res.data);
 
@@ -63,7 +68,10 @@ class SetupDemo {
         res = await this.http.requestWithRetry({
             method: 'POST',
             url: this.selfUrl + '/v1/issuer/cred-def',
-            data: credDef
+            data: credDef,
+            headers: {
+                agent: profile.agent_id
+            }
         });
         Logger.log(res.data);
     }
