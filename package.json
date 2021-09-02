@@ -12,10 +12,9 @@
         "build": "tsc",
         "lint": "tslint -p tsconfig.json -c tslint.json",
         "lint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
-        "script:dev": "ts-node -r dotenv/config ",
-        "start": "ts-node -r tsconfig-paths/register -r dotenv/config src/main.ts",
+        "start": "rm -rf dist/ && tsc && node -r dotenv/config dist/main.js",
         "start:debug": "nodemon --legacy-watch",
-        "test": "node -r dotenv/config node_modules/.bin/jest --runInBand",
+        "test": "NODE_ENV=LOCAL node -r dotenv/config node_modules/.bin/jest --runInBand",
         "test:local": "NODE_ENV=LOCAL node -r dotenv/config node_modules/.bin/jest --runInBand -- local",
         "test:integration": "node -r dotenv/config node_modules/.bin/jest --runInBand -- integration"
     },
@@ -28,7 +27,7 @@
         "dotenv": "^8.2.0",
         "glob-parent": "^5.1.2",
         "normalize-url": "^4.5.1",
-        "protocol-common": "0.1.41"
+        "protocol-common": "0.1.46"
     },
     "devDependencies": {
         "@nestjs/testing": "^7.6.14",
@@ -37,7 +36,6 @@
         "jest": "^26.6.3",
         "nodemon": "^2.0.7",
         "ts-jest": "^26.5.4",
-        "ts-node": "^9.1.1",
         "tsconfig-paths": "^3.9.0",
         "tslint": "^6.1.3"
     },
@@ -60,13 +58,12 @@
     },
     "nodemonConfig": {
         "watch": [
-            "src",
-            "implementations"
+            "src"
         ],
         "ext": "ts",
         "ignore": [
             "src/**/*.spec.ts"
         ],
-        "exec": "ts-node -r tsconfig-paths/register -r dotenv/config src/main.ts"
+        "exec": "tsc && node -r dotenv/config dist/main.js"
     }
 }

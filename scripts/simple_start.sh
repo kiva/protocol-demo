@@ -8,4 +8,3 @@ sleep 30 # wait for agency to be up
 docker-compose -f docker-compose.yml up -d
 sleep 35 # wait for agent to spin up
 # We don't need to explicitly run demo scripts, since tests handle setup tasks
-#docker exec -it demo-controller npm run script:dev /www/src/scripts/setup.demo.ts

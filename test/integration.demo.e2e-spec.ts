@@ -7,7 +7,7 @@ import { ProtocolUtility } from 'protocol-common/protocol.utility';
  *
  * These tests are designed to be run after the following steps:
  *   docker-compose up -d
- *   docker exec -it demo-controller node /www/scripts/setup.demo.js
+ *   docker exec -it demo-controller node /www/dist/scripts/setup.demo.js
  */
 describe('Full system eKYC integration tests for demo issue and verify flows', () => {
     const demoUrl = 'http://localhost:3014';
@@ -38,14 +38,18 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
             });
     });
 
+    // Note that if you run the integration tests twice, this one will fail with a 400 already registered error.
+    // So don't worry if that's the case, in CI it will only ever run once.
     it('Register demo agent in multi controller', async () => {
         const data = {
+            // TODO remove these once the new aries-controller is in
             "walletId": "demoWalletId",
             "walletKey": "demoWalletKey",
+            "agentId": "demo-agent",
+
             "seed": "000000000000000000000000Steward2",
             "label": "Demo Controller",
             "useTailsServer": false,
-            "agentId": "demo-agent",
             "adminApiKey": "demoAdminApiKey"
         }
         return request(demoUrl)
@@ -53,8 +57,13 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
             .set('agent', 'demo-agent')
             .send(data)
             .expect((res) => {
-                expect(res.status).toBe(201);
-                expect(res.body.agentId).toBeDefined();
+                try {
+                    expect(res.status).toBe(201);
+                    expect(res.body.agentId).toBeDefined();
+                } catch (e) {
+                    e.message = e.message + '\nDetails: ' + inspect(res.body);
+                    throw e;
+                }
             });
     });
 
