@@ -42,11 +42,6 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
     // So don't worry if that's the case, in CI it will only ever run once.
     it('Register demo agent in multi controller', async () => {
         const data = {
-            // TODO remove these once the new aries-controller is in
-            "walletId": "demoWalletId",
-            "walletKey": "demoWalletKey",
-            "agentId": "demo-agent",
-
             "seed": "000000000000000000000000Steward2",
             "label": "Demo Controller",
             "useTailsServer": false,
