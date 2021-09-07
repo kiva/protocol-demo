@@ -1,0 +1,265 @@
+version: '3.5'
+
+networks:
+  agency-network:
+    name: agency-network
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        -
+          subnet: 10.0.0.0/24
+
+services:
+  # indy pool needs a static ip configured in the pool_transactions_genesis so need to start it first
+  protocol-indy-pool:
+    build:
+      context: services/indy_pool
+      dockerfile: indy-pool-kiva.dockerfile
+      args:
+        pool_ip: '10.0.0.2'
+    image: protocol-indy-pool
+    container_name: protocol-indy-pool
+    working_dir: /home/indy
+    ports:
+      - "9701:9701"
+      - "9702:9702"
+      - "9703:9703"
+      - "9704:9704"
+      - "9705:9705"
+      - "9706:9706"
+      - "9707:9707"
+      - "9708:9708"
+    networks:
+      agency-network:
+        ipv4_address: 10.0.0.2
+
+  protocol-gateway:
+    image: "kivaprotocol/protocol-gateway:0.0.17"
+    env_file:
+      - services/gateway/test.env
+    container_name: protocol-gateway
+    working_dir: /www
+    ports:
+      - "8080:8080"
+    expose: 
+      - "8080"
+    networks:
+      - agency-network
+    depends_on:
+      - protocol-indy-pool
+      - protocol-bio-auth-service
+    tty: true
+
+  protocol-auth-db:
+    image: postgres:11
+    container_name: protocol-auth-db
+    command: postgres -c logging_collector=on -c log_destination=stderr
+    env_file:
+      - services/auth_db/test.env
+    networks:
+      - agency-network
+    depends_on:
+      - protocol-identity-wallet-db
+    tty: true
+
+  protocol-identity-db:
+    image: postgres:11
+    container_name: protocol-identity-db
+    command: postgres -c logging_collector=on -c log_destination=stderr
+    shm_size: '2gb'
+    env_file:
+      - services/identity_db/test.env
+    networks:
+      - agency-network
+    depends_on:
+      - protocol-identity-template-db
+    tty: true
+
+  protocol-identity-template-db:
+    command: postgres -c logging_collector=on -c log_destination=stderr
+    image: postgres:11
+    container_name: protocol-identity-template-db
+    restart: always
+    env_file:
+      - services/identity_template_db/test.env
+    networks:
+      - agency-network
+    depends_on:
+      - aries-key-guardian
+    tty: true
+
+  protocol-identity-wallet-db:
+    image: postgres:11
+    container_name: protocol-identity-wallet-db
+    command: postgres -c logging_collector=on -c log_destination=stderr
+    volumes:
+      - ./services/identity_wallet_db/create_scripts:/docker-entrypoint-initdb.d/
+    env_file:
+      - services/identity_wallet_db/test.env
+    networks:
+      - agency-network
+    depends_on:
+      - aries-guardianship-agency
+    tty: true
+
+  protocol-bio-auth-service:
+    image: "kivaprotocol/bioauth:0.0.21"
+    container_name: protocol-bio-auth-service
+    ports:
+      - "8081:8080"
+    env_file:
+      - services/bio_auth_service/test.env
+    networks:
+      - agency-network
+    depends_on:
+      - protocol-identity-template-db
+    tty: true
+
+  protocol-bioanalyzer-service:
+    image: "kivaprotocol/bioanalyzer:0.0.21"
+    container_name: protocol-bioanalyzer-service
+    working_dir: /app
+    env_file:
+        - services/bioanalyzer_service/test.env
+    ports:
+        - "8089:8080"
+    networks:
+        - agency-network
+    depends_on:
+        - protocol-bio-auth-service
+    tty: true
+
+  aries-guardianship-agency:
+    image: "kivaprotocol/aries-guardianship-agency:0.0.50"
+    container_name: aries-guardianship-agency
+    working_dir: /www
+    env_file:
+      - services/aries_guardianship_agency/test.env
+    ports:
+      - "3010:3010"
+    expose:
+      - "3010"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - agency-network
+    depends_on:
+      - protocol-indy-pool
+    tty: true
+    privileged: true
+
+  aries-key-guardian:
+      image: "kivaprotocol/aries-key-guardian:0.0.30"
+    container_name: aries-key-guardian
+    working_dir: /www
+    env_file:
+      - services/aries-key-guardian/test.env
+    ports:
+      - "3005:3003"
+    expose:
+      - "3005"
+    networks:
+      - agency-network
+    tty: true
+    depends_on:
+      - protocol-auth-db
+
+  kiva-controller:
+    image: "kivaprotocol/kiva-controller:0.0.47"
+    container_name: kiva-controller
+    working_dir: /www
+    env_file:
+      - services/kiva_controller/test.env
+    ports:
+      - "3011:3011"
+    expose:
+      - "3011"
+    networks:
+      - agency-network
+    tty: true
+    depends_on:
+      - aries-key-guardian
+
+  fsp-controller:
+    image: "kivaprotocol/fsp-controller:0.0.47"
+    container_name: fsp-controller
+    working_dir: /www
+    env_file:
+      - services/fsp_controller/test.env
+    ports:
+      - "3013:3013"
+    expose:
+      - "3013"
+    networks:
+      - agency-network
+    tty: true
+    depends_on:
+      - protocol-identity-db
+
+  demo-controller:
+    image: "kivaprotocol/demo-controller:0.0.42"
+    container_name: demo-controller
+    working_dir: /www
+    env_file:
+      - services/demo_controller/test.env
+    ports:
+      - "3014:3014"
+    expose:
+      - "3014"
+    networks:
+      - agency-network
+    tty: true
+    depends_on:
+      - fsp-controller
+ 
+  tails-server:
+    image: kivaprotocol/tails-server:latest
+    container_name: tails-server
+    ports:
+      - 6543:6543
+    networks:
+      - agency-network
+    depends_on:
+      - protocol-indy-pool
+    environment:
+      - MSYS_NO_PATHCONV=1
+      - DOCKERHOST=${APPLICATION_URL-$(docker run --rm --net=host eclipse/che-ip)}
+      - GENESIS_URL=${GENESIS_URL:-http://$DOCKERHOST:9000/genesis}
+      - STORAGE_PATH=${STORAGE_PATH:-/tmp/tails-files}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - TAILS_SERVER_URL=${TAILS_SERVER_URL:-http://$DOCKERHOST:6543}
+    command: >
+      tails-server
+          --host 0.0.0.0
+          --port 6543
+          --storage-path /tmp/tails-files
+          --log-level INFO
+
+  multitenant:
+    image: bcgovimages/aries-cloudagent:py36-1.15-1_0.6.0
+    container_name: multitenant
+    networks:
+      - agency-network
+    depends_on:
+      - protocol-indy-pool
+      - protocol-identity-wallet-db
+      - aries-guardianship-agency
+      - tails-server
+    ports:
+      - "3020:3020"
+      - "3021:3021"
+    expose: 
+      - "3020"
+      - "3021"
+    env_file:
+      - services/multitenant/test.env
+    # Have multitenant wait a few seconds until indy ledger is up
+    # Also for some reason inbound transport doesn't work via env args so using commmand line here
+    entrypoint: /bin/bash
+    command: [
+      "-c",
+      "sleep 14;
+      aca-py start \
+      --inbound-transport http '0.0.0.0' 3020"
+    ]
