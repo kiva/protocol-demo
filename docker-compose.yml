@@ -12,7 +12,7 @@ services:
             context: .
             dockerfile: Dockerfile
         command: npm run start:debug
-        image: demo-controller
+        image: kivaprotocol/aries-controller:1.0.72
         container_name: demo-controller
         working_dir: /www
         ports:
