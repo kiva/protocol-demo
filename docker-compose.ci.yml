@@ -11,7 +11,7 @@ services:
         build:
             context: .
             dockerfile: Dockerfile.production
-        image: kivaprotocol/aries-controller:1.0.72
+        image: kivaprotocol/aries-controller:1.0.75
         container_name: demo-controller
         working_dir: /www
         ports:
