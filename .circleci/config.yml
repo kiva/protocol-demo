@@ -43,14 +43,11 @@ workflows:
   build-test-deploy:
     jobs:
       - integration-test:
-          requires:
-            - build-and-test
           filters: # run for all branches AND tags
             tags:
               only: /.*/
       - docker/publish:
           requires:
-              - build-and-test
               - integration-test
           filters: # only run for semver tagged versions
               tags:
