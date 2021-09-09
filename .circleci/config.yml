@@ -34,7 +34,7 @@ jobs:
       - run:
           name: Running demo integration tests
           command: |
-            if ! npm run test:integration ; then
+            if ! npm run test ; then
               echo "Tests failed. Server logs:";
               docker-compose -f docker-compose.yml logs;
               exit 1;

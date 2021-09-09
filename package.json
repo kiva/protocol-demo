@@ -12,9 +12,7 @@
         "build": "tsc",
         "lint": "tslint -p tsconfig.json -c tslint.json",
         "lint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
-        "test": "NODE_ENV=LOCAL node -r dotenv/config node_modules/.bin/jest --runInBand",
-        "test:local": "NODE_ENV=LOCAL node -r dotenv/config node_modules/.bin/jest --runInBand -- local",
-        "test:integration": "node -r dotenv/config node_modules/.bin/jest --runInBand -- integration"
+        "test": "NODE_ENV=LOCAL node -r dotenv/config node_modules/.bin/jest --runInBand"
     },
     "dependencies": {
         "@nestjs/common": "^7.6.14",
@@ -53,15 +51,5 @@
         },
         "coverageDirectory": "../coverage",
         "testEnvironment": "node"
-    },
-    "nodemonConfig": {
-        "watch": [
-            "src"
-        ],
-        "ext": "ts",
-        "ignore": [
-            "src/**/*.spec.ts"
-        ],
-        "exec": "tsc && node -r dotenv/config dist/main.js"
     }
 }
