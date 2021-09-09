@@ -1,17 +1,6 @@
 version: 2.1
 
 jobs:
-  build-and-test:
-    executor:
-      name: node/default
-      tag: '14.15.1'
-    steps:
-      - checkout
-      - run: npm install
-      - run: npm run lint
-      - run: npm run build
-      - run: npm run test:local
-
   integration-test:
     machine:
       docker_layer_caching: true
@@ -31,7 +20,7 @@ jobs:
       - run:
           name: Setup demo
           command: |
-            docker pull bcgovimages/aries-cloudagent:py36-1.16-1_0.7.0
+            docker pull bcgovimages/aries-cloudagent:py36-1.16-1_0.7.1
       - run:
           name: Start docker compose and wait for readiness
           command: |
@@ -53,10 +42,6 @@ jobs:
 workflows:
   build-test-deploy:
     jobs:
-      - build-and-test:
-          filters: # run for all branches AND tags
-            tags:
-              only: /.*/
       - integration-test:
           requires:
             - build-and-test

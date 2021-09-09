@@ -80,7 +80,7 @@ services:
             - ACAPY_ADMIN_API_KEY=adminApiKey
 
     demo-controller:
-        image: aries-controller-demo #kivaprotocol/aries-controller:latest
+        image: kivaprotocol/aries-controller:latest
         container_name: demo-controller
         working_dir: /www
         ports:
@@ -97,51 +97,3 @@ services:
             - PORT=3014
             - SELF_URL=http://demo-controller:3014
             - ADMIN_API_KEY=adminApiKey
-
-    # multitenant:
-    #     image: bcgovimages/aries-cloudagent:py36-1.16-1_0.7.1
-    #     container_name: dc-multitenant
-    #     networks:
-    #       - agency-network
-    #     depends_on:
-    #       - protocol-indy-pool
-    #       - protocol-identity-wallet-db
-    #       - aries-guardianship-agency
-    #     ports:
-    #       - "3020:3020"
-    #       - "3021:3021"
-    #     expose: 
-    #       - "3020"
-    #       - "3021"
-    #     volumes:
-    #       - ./resources/:/home/indy/resources
-    #     # Have multitenant wait a few seconds until indy ledger is up
-    #     # Also for some reason inbound transport doesn't work via env args so using commmand line here
-    #     entrypoint: /bin/bash
-    #     command: [
-    #         "-c",
-    #         "sleep 14;
-    #         aca-py start \
-    #         --inbound-transport http '0.0.0.0' 3020"
-    #     ]
-    #     environment:
-    #         - ACAPY_OUTBOUND_TRANSPORT=http
-    #         - ACAPY_ADMIN=[0.0.0.0,3021]
-    #         - ACAPY_ENDPOINT=http://multitenant:3020
-    #         - ACAPY_WEBHOOK_URL=http://aries-guardianship-agency:3010/v1/controller/multitenant
-    #         - ACAPY_ADMIN_API_KEY=adminApiKey
-    #         - ACAPY_LABEL=multitenant
-    #         - ACAPY_WALLET_NAME=multitenant_name
-    #         - ACAPY_WALLET_KEY=multitenant_key
-    #         - ACAPY_WALLET_TYPE=indy
-    #         - ACAPY_WALLET_STORAGE_TYPE=postgres_storage
-    #         - ACAPY_WALLET_SEED=0000000000000000000000000000Any1
-    #         - ACAPY_WALLET_STORAGE_CONFIG={"url":"protocol-identity-wallet-db:5432","wallet_scheme":"MultiWalletSingleTable"}
-    #         - ACAPY_WALLET_STORAGE_CREDS={"account":"postgres","password":"dbpass","admin_account":"postgres","admin_password":"dbpass"}
-    #         - ACAPY_GENESIS_FILE=/home/indy/resources/pool_transactions_genesis_local_dev
-    #         - ACAPY_WALLET_LOCAL_DID=true
-    #         - ACAPY_LOG_LEVEL=info
-    #         - ACAPY_AUTO_PROVISION=true
-    #         - ACAPY_MULTITENANT=true
-    #         - ACAPY_MULTITENANT_ADMIN=true
-    #         - ACAPY_MULTITENANT_JWT_SECRET=jwtSecret
