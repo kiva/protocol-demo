@@ -1,28 +1,94 @@
-# Docker compose to spin up the demo controller for development
+# Spin up the dependencies for demo-controller circle ci tests
 #
 version: '3.5'
 
 networks:
     agency-network:
-        external: true
+      name: agency-network
+      driver: bridge
+      ipam:
+        driver: default
+        config:
+          -
+            subnet: 10.0.0.0/24
 
 services:
-    demo-controller:
+    protocol-indy-pool:
         build:
             context: .
-            dockerfile: Dockerfile
-        command: npm run start:debug
-        image: kivaprotocol/aries-controller:1.0.72
+            dockerfile: resources/indy-pool.dockerfile
+            args:
+                pool_ip: '10.0.0.2'
+        image: dc-indy-pool
+        container_name: dc-indy-pool
+        working_dir: /home/indy
+        ports:
+        - "9701:9701"
+        - "9702:9702"
+        - "9703:9703"
+        - "9704:9704"
+        - "9705:9705"
+        - "9706:9706"
+        - "9707:9707"
+        - "9708:9708"
+        networks:
+            agency-network:
+                ipv4_address: 10.0.0.2
+
+    protocol-identity-wallet-db:
+        image: postgres:11
+        container_name: dc-identity-wallet-db
+        command: postgres -c logging_collector=on -c log_destination=stderr
+        volumes:
+            - ./resources/identity_wallet:/docker-entrypoint-initdb.d/
+        networks:
+            - agency-network
+        depends_on:
+            - protocol-indy-pool
+        tty: true
+        environment:
+            - POSTGRES_HOST=protocol-identity-wallet-db
+            - POSTGRES_DB=wallets
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=dbpass
+
+    aries-guardianship-agency:
+        image: kivaprotocol/aries-guardianship-agency:latest
+        container_name: dc-aries-guardianship-agency
+        working_dir: /www
+        ports:
+            - "3010:3010"
+        expose:
+            - "3010"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - agency-network
+        depends_on:
+            - protocol-indy-pool
+        tty: true
+        privileged: true
+        environment:
+            - NODE_ENV=LOCAL
+            - PUBLIC_URL=http://aries-guardianship-agency:3010
+            - WALLET_DB_HOST=protocol-identity-wallet-db
+            - WALLET_DB_PORT=5432
+            - WALLET_DB_USER=postgres
+            - WALLET_DB_PASS=dbpass
+            - WALLET_DB_ADMIN_USER=postgres
+            - WALLET_DB_ADMIN_PASS=dbpass
+            - ACAPY_ADMIN_API_KEY=adminApiKey
+
+    demo-controller:
+        image: aries-controller-demo #kivaprotocol/aries-controller:latest
         container_name: demo-controller
         working_dir: /www
         ports:
             - "3014:3014"
-        volumes:
-            - ./:/www
-            # For dev purposes this simulates npm-link, since symbolic links on the mac won't work in the docker container
-            #- ../aries-controller/dist:/www/node_modules/aries-controller
         networks:
             - agency-network
+        depends_on:
+          - protocol-indy-pool
         tty: true
         environment:
             - NODE_ENV=LOCAL
@@ -31,3 +97,51 @@ services:
             - PORT=3014
             - SELF_URL=http://demo-controller:3014
             - ADMIN_API_KEY=adminApiKey
+
+    # multitenant:
+    #     image: bcgovimages/aries-cloudagent:py36-1.16-1_0.7.1
+    #     container_name: dc-multitenant
+    #     networks:
+    #       - agency-network
+    #     depends_on:
+    #       - protocol-indy-pool
+    #       - protocol-identity-wallet-db
+    #       - aries-guardianship-agency
+    #     ports:
+    #       - "3020:3020"
+    #       - "3021:3021"
+    #     expose: 
+    #       - "3020"
+    #       - "3021"
+    #     volumes:
+    #       - ./resources/:/home/indy/resources
+    #     # Have multitenant wait a few seconds until indy ledger is up
+    #     # Also for some reason inbound transport doesn't work via env args so using commmand line here
+    #     entrypoint: /bin/bash
+    #     command: [
+    #         "-c",
+    #         "sleep 14;
+    #         aca-py start \
+    #         --inbound-transport http '0.0.0.0' 3020"
+    #     ]
+    #     environment:
+    #         - ACAPY_OUTBOUND_TRANSPORT=http
+    #         - ACAPY_ADMIN=[0.0.0.0,3021]
+    #         - ACAPY_ENDPOINT=http://multitenant:3020
+    #         - ACAPY_WEBHOOK_URL=http://aries-guardianship-agency:3010/v1/controller/multitenant
+    #         - ACAPY_ADMIN_API_KEY=adminApiKey
+    #         - ACAPY_LABEL=multitenant
+    #         - ACAPY_WALLET_NAME=multitenant_name
+    #         - ACAPY_WALLET_KEY=multitenant_key
+    #         - ACAPY_WALLET_TYPE=indy
+    #         - ACAPY_WALLET_STORAGE_TYPE=postgres_storage
+    #         - ACAPY_WALLET_SEED=0000000000000000000000000000Any1
+    #         - ACAPY_WALLET_STORAGE_CONFIG={"url":"protocol-identity-wallet-db:5432","wallet_scheme":"MultiWalletSingleTable"}
+    #         - ACAPY_WALLET_STORAGE_CREDS={"account":"postgres","password":"dbpass","admin_account":"postgres","admin_password":"dbpass"}
+    #         - ACAPY_GENESIS_FILE=/home/indy/resources/pool_transactions_genesis_local_dev
+    #         - ACAPY_WALLET_LOCAL_DID=true
+    #         - ACAPY_LOG_LEVEL=info
+    #         - ACAPY_AUTO_PROVISION=true
+    #         - ACAPY_MULTITENANT=true
+    #         - ACAPY_MULTITENANT_ADMIN=true
+    #         - ACAPY_MULTITENANT_JWT_SECRET=jwtSecret
