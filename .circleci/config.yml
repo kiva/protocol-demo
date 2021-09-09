@@ -1,17 +1,6 @@
 version: 2.1
 
 jobs:
-  build-and-test:
-    executor:
-      name: node/default
-      tag: '14.15.1'
-    steps:
-      - checkout
-      - run: npm install
-      - run: npm run lint
-      - run: npm run build
-      - run: npm run test:local
-
   integration-test:
     machine:
       docker_layer_caching: true
@@ -31,17 +20,13 @@ jobs:
       - run:
           name: Setup demo
           command: |
-            docker pull bcgovimages/aries-cloudagent:py36-1.16-1_0.7.0
+            docker pull bcgovimages/aries-cloudagent:py36-1.16-1_0.7.1
       - run:
           name: Start docker compose and wait for readiness
           command: |
-            docker-compose -f docker-compose.ci.yml build
-            docker-compose -f docker-compose.dep.yml up -d
+            docker-compose -f docker-compose.yml up -d
             sleep 30
-            docker-compose -f docker-compose.ci.yml up -d
-            sleep 30
-            docker-compose -f docker-compose.dep.yml logs
-            docker-compose -f docker-compose.ci.yml logs
+            docker-compose -f docker-compose.yml logs
       - run:
           name: Setup integration tests
           command: |
@@ -49,28 +34,20 @@ jobs:
       - run:
           name: Running demo integration tests
           command: |
-            if ! npm run test:integration ; then
+            if ! npm run test ; then
               echo "Tests failed. Server logs:";
-              docker-compose -f docker-compose.dep.yml logs;
-              docker-compose -f docker-compose.ci.yml logs;
+              docker-compose -f docker-compose.yml logs;
               exit 1;
             fi
 workflows:
   build-test-deploy:
     jobs:
-      - build-and-test:
-          filters: # run for all branches AND tags
-            tags:
-              only: /.*/
       - integration-test:
-          requires:
-            - build-and-test
           filters: # run for all branches AND tags
             tags:
               only: /.*/
       - docker/publish:
           requires:
-              - build-and-test
               - integration-test
           filters: # only run for semver tagged versions
               tags:

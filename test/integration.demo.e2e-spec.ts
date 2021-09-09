@@ -3,11 +3,10 @@ import { inspect } from 'util';
 import { ProtocolUtility } from 'protocol-common/protocol.utility';
 
 /**
- * The demo test is a very specific test to make sure the pieces for the demo work
- *
- * These tests are designed to be run after the following steps:
+ * The demo test runs through a sample flow where a new agent is registered, adds a schema + cred def, issues a credential and verifies it
+ * It is meant to be run through once, some operations will fail on the second run through
+ * It doesn't requite any scripts to be run, just:
  *   docker-compose up -d
- *   docker exec -it demo-controller node /www/dist/scripts/setup.demo.js
  */
 describe('Full system eKYC integration tests for demo issue and verify flows', () => {
     const demoUrl = 'http://localhost:3014';
@@ -40,20 +39,20 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
 
     // Note that if you run the integration tests twice, this one will fail with a 400 already registered error.
     // So don't worry if that's the case, in CI it will only ever run once.
-    it('Register demo agent in multi controller', async () => {
+    it('Register test agent in multi controller', async () => {
         const data = {
-            "seed": "000000000000000000000000Steward2",
-            "label": "Demo Controller",
+            "seed": "000000000000000000000000Steward2", // Register as steward to make setup simpler
+            "label": "Test Controller",
             "useTailsServer": false,
-            "adminApiKey": "demoAdminApiKey"
+            "adminApiKey": "testAdminApiKey"
         }
         return request(demoUrl)
-            .post('/v1/agent/register')
-            .set('agent', 'demo-agent')
+            .post('/v2/api/agent/register')
+            .set('agent', 'test-agent')
             .send(data)
             .expect((res) => {
                 try {
-                    expect(res.status).toBe(201);
+                    
                     expect(res.body.agentId).toBeDefined();
                 } catch (e) {
                     e.message = e.message + '\nDetails: ' + inspect(res.body);
@@ -69,19 +68,23 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         };
         return request(demoUrl)
             .post('/v1/agent/publicize-did')
-            .set('agent', 'demo-agent')
+            .set('agent', 'test-agent')
             .send(data)
-            .expect(201)
             .expect((res) => {
-                expect(res.body.result).toBeDefined();
+                try {
+                    expect(res.status).toBe(201);
+                    expect(res.body.result).toBeDefined();
+                } catch (e) {
+                    e.message = e.message + '\nDetails: ' + inspect(res.body);
+                    throw e;
+                }  
             });
     });
 
-    it('Demo agent creates schema', async () => {
+    it('Test agent creates schema and cred def', async () => {
         await ProtocolUtility.delay(1000);
         const data = {
-            "schema_name": "Identity",
-            "schema_version": "1.0.0",
+            "schemaName": "test",
             "attributes": [
                 "nationalId",
                 "firstName",
@@ -91,41 +94,24 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
             ]
         };
         return request(demoUrl)
-            .post('/v1/steward/schema')
-            .set('agent', 'demo-agent')
+            .post('/v2/api/schema-cred-def')
+            .set('agent', 'test-agent')
             .send(data)
             .expect(201)
             .expect((res) => {
-                expect(res.body.schema_id).toBeDefined();
+                expect(res.body.schemaId).toBeDefined();
             });
     });
 
-    it('Demo agent creates cred def', async () => {
+    it('Test agent connects to test agent', async () => {
         await ProtocolUtility.delay(1000);
         const data = {
-            "schema_id": "EbP4aYNeTHL6q385GuVpRV:2:Identity:1.0.0",
-            "tag": "tag1",
-            "support_revocation": false
-        };
-        return request(demoUrl)
-            .post('/v1/issuer/cred-def')
-            .set('agent', 'demo-agent')
-            .send(data)
-            .expect(201)
-            .expect((res) => {
-                expect(res.body.credential_definition_id).toBeDefined();
-            });
-    });
-
-    it('Demo agent connects to test agent', async () => {
-        await ProtocolUtility.delay(1000);
-        const data = {
-            alias: 'demo',
+            alias: 'test',
             invitation: connectionData,
         };
         return request(demoUrl)
             .post('/v1/agent/accept-connection')
-            .set('agent', 'demo-agent')
+            .set('agent', 'test-agent')
             .send(data)
             .expect(201)
             .expect((res) => {
@@ -138,7 +124,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         await ProtocolUtility.delay(3000);
         return request(demoUrl)
             .get(`/v2/api/connection/${demoConnectionId}`)
-            .set('agent', 'demo-agent')
+            .set('agent', 'test-agent')
             .expect(200)
             .expect((res) => {
                 expect(res.body.state).toBe('response');
@@ -156,11 +142,11 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
                 'photo~attach': '89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d4944415478da6364f8ffbf1e000584027fc25b1e2a00000000',
             },
             connectionId: demoConnectionId,
-            profile: 'demo.cred.def.json'
+            profile: 'test.cred.def.json'
         };
         return request(demoUrl)
             .post('/v2/api/issue')
-            .set('agent', 'demo-agent')
+            .set('agent', 'test-agent')
             .send(issueData)
             .expect((res) => {
                 try {
@@ -175,15 +161,46 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
             });
     });
 
+    it('Save a proof request profile', async () => {
+        const data = {
+            'profileName': 'test.proof.request.json',
+            'profile': {
+                'comment': 'Test proof request profile',
+                'proof_request':{
+                    'name': 'TestProofRequest',
+                    'version':'1.0.0',
+                    'requested_attributes':{
+                        'nationalId':{
+                            'name':'nationalId',
+                            'restrictions': []
+                        },
+                        'firstName':{
+                            'name':'firstName',
+                            'restrictions': []
+                        }
+                    },
+                    'requested_predicates':{}
+                }
+            }
+        }
+        return request(demoUrl)
+            .post('/v2/api/profiles')
+            .set('agent', 'test-agent')
+            .send(data)
+            .expect((res) => {
+                expect(res.status).toBe(201);
+            });
+    });
+
     it('Initiate verify request', async () => {
         await ProtocolUtility.delay(5000);
         const data = {
             connectionId: demoConnectionId,
-            profile: 'demo.proof.request.json',
+            profile: 'test.proof.request.json',
         };
         return request(demoUrl)
             .post(`/v2/api/verify`)
-            .set('agent', 'demo-agent')
+            .set('agent', 'test-agent')
             .send(data)
             .expect((res) => {
                 try {
@@ -202,7 +219,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
         await ProtocolUtility.delay(5000);
         return request(demoUrl)
             .get(`/v2/api/verify/${presExId}`)
-            .set('agent', 'demo-agent')
+            .set('agent', 'test-agent')
             .expect(200)
             .expect((res) => {
                 expect(res.body.state).toBe('verified');
