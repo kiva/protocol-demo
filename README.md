@@ -35,9 +35,9 @@ We will be referencing the following GitHub repos several times. Though you shou
 [aries-guardianship-agency](https://github.com/kiva/aries-guardianship-agency)  
 [aries-key-guardian](https://github.com/kiva/aries-key-guardian.git)  
 [guardian-bio-auth](https://github.com/kiva/guardian-bio-auth.git)  
-[protocol-gateway](https://github.com/kiva/protocol-gateway.git)
-[protocol-common](https://github.com/kiva/protocol-common.git) (optional)
-[aries-controller](https://github.com/kiva/aries-controller) (optional)
+[protocol-gateway](https://github.com/kiva/protocol-gateway.git)  
+[protocol-common](https://github.com/kiva/protocol-common.git) (optional)  
+[aries-controller](https://github.com/kiva/aries-controller) (optional)  
 
 ## Scripted Setup
 
