@@ -18,9 +18,9 @@ We will be referencing the following github repos several times.  Here's the lin
 [aries-guardianship-agency](https://github.com/kiva/aries-guardianship-agency)  
 [aries-key-guardian](https://github.com/kiva/aries-key-guardian.git)  
 [guardian-bio-auth](https://github.com/kiva/guardian-bio-auth.git)  
-[protocol-gateway](https://github.com/kiva/protocol-gateway.git)
-[protocol-common](https://github.com/kiva/protocol-common.git) (optional)
-[aries-controller](https://github.com/kiva/aries-controller) (optional)
+[protocol-gateway](https://github.com/kiva/protocol-gateway.git)  
+[protocol-common](https://github.com/kiva/protocol-common.git) (optional)  
+[aries-controller](https://github.com/kiva/aries-controller) (optional)  
 
 ## Scripted Setup
 1. Create a `home directory`.  The idea here is that we want some top level folder on your machine that contains all our repos in one place
