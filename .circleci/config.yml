@@ -24,9 +24,9 @@ jobs:
       - run:
           name: Start docker compose and wait for readiness
           command: |
-            docker-compose -f docker-compose.yml up -d
+            docker-compose -f docker-compose.ci.yml up -d
             sleep 30
-            docker-compose -f docker-compose.yml logs
+            docker-compose -f docker-compose.ci.yml logs
       - run:
           name: Setup integration tests
           command: |
@@ -36,7 +36,7 @@ jobs:
           command: |
             if ! npm run test ; then
               echo "Tests failed. Server logs:";
-              docker-compose -f docker-compose.yml logs;
+              docker-compose -f docker-compose.ci.yml logs;
               exit 1;
             fi
 workflows:
