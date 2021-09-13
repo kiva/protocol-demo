@@ -1,26 +1,24 @@
-# Docker compose to spin up the demo controller for development
+# Spin up the dependencies for demo-controller circle ci tests
 #
 version: '3.5'
 
 networks:
     agency-network:
-        external: true
+      name: agency-network
+      driver: bridge
+      ipam:
+        driver: default
+        config:
+          -
+            subnet: 10.0.0.0/24
 
 services:
     demo-controller:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        command: npm run start:debug
-        image: demo-controller
+        image: kivaprotocol/aries-controller:latest
         container_name: demo-controller
         working_dir: /www
         ports:
             - "3014:3014"
-        volumes:
-            - ./:/www
-            # For dev purposes this simulates npm-link, since symbolic links on the mac won't work in the docker container
-            #- ../aries-controller/dist:/www/node_modules/aries-controller
         networks:
             - agency-network
         tty: true

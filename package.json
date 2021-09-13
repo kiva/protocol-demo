@@ -12,29 +12,17 @@
         "build": "tsc",
         "lint": "tslint -p tsconfig.json -c tslint.json",
         "lint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
-        "start": "rm -rf dist/ && tsc && node -r dotenv/config dist/main.js",
-        "start:debug": "nodemon --legacy-watch",
-        "test": "NODE_ENV=LOCAL node -r dotenv/config node_modules/.bin/jest --runInBand",
-        "test:local": "NODE_ENV=LOCAL node -r dotenv/config node_modules/.bin/jest --runInBand -- local",
-        "test:integration": "node -r dotenv/config node_modules/.bin/jest --runInBand -- integration"
+        "test": "NODE_ENV=LOCAL node -r dotenv/config node_modules/.bin/jest --runInBand"
     },
-    "dependencies": {
-        "@nestjs/common": "^7.6.14",
-        "@nestjs/core": "^7.6.14",
-        "@nestjs/swagger": "^4.7.16",
-        "aries-controller": "1.0.71",
-        "class-transformer": "^0.4.0",
-        "dotenv": "^8.2.0",
-        "glob-parent": "^5.1.2",
-        "normalize-url": "^4.5.1",
-        "protocol-common": "0.1.46"
-    },
+    "dependencies": {},
     "devDependencies": {
+        "@nestjs/common": "^7.6.14",
         "@nestjs/testing": "^7.6.14",
         "@types/jest": "^26.0.20",
         "@types/supertest": "^2.0.10",
+        "dotenv": "^8.2.0",
         "jest": "^26.6.3",
-        "nodemon": "^2.0.7",
+        "protocol-common": "0.1.46",
         "ts-jest": "^26.5.4",
         "tsconfig-paths": "^3.9.0",
         "tslint": "^6.1.3"
@@ -55,15 +43,5 @@
         },
         "coverageDirectory": "../coverage",
         "testEnvironment": "node"
-    },
-    "nodemonConfig": {
-        "watch": [
-            "src"
-        ],
-        "ext": "ts",
-        "ignore": [
-            "src/**/*.spec.ts"
-        ],
-        "exec": "tsc && node -r dotenv/config dist/main.js"
     }
 }
