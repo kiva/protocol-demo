@@ -217,7 +217,7 @@ services:
       - ACAPY_MULTITENANT_JWT_SECRET=jwtSecret
 
   aries-key-guardian:
-      image: "kivaprotocol/aries-key-guardian:0.0.30"
+    image: "kivaprotocol/aries-key-guardian:0.0.30"
     container_name: aries-key-guardian
     working_dir: /www
     ports:
