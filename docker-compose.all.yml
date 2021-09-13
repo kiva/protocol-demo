@@ -36,8 +36,6 @@ services:
 
   protocol-gateway:
     image: "kivaprotocol/protocol-gateway:0.0.17"
-    env_file:
-      - services/gateway/test.env
     container_name: protocol-gateway
     working_dir: /www
     ports:
@@ -50,44 +48,57 @@ services:
       - protocol-indy-pool
       - protocol-bio-auth-service
     tty: true
+    environment:
+      - NODE_ENV=LOCAL
 
   protocol-auth-db:
     image: postgres:11
     container_name: protocol-auth-db
     command: postgres -c logging_collector=on -c log_destination=stderr
-    env_file:
-      - services/auth_db/test.env
     networks:
       - agency-network
     depends_on:
       - protocol-identity-wallet-db
     tty: true
+    environment:
+      - POSTGRES_DB=authdb
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=dbpass
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=protocol-auth-db
 
   protocol-identity-db:
     image: postgres:11
     container_name: protocol-identity-db
     command: postgres -c logging_collector=on -c log_destination=stderr
     shm_size: '2gb'
-    env_file:
-      - services/identity_db/test.env
     networks:
       - agency-network
     depends_on:
       - protocol-identity-template-db
     tty: true
+    environment:
+      - POSTGRES_HOST=protocol-identity-db
+      - POSTGRES_DB=identitydb
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=dbpass
 
   protocol-identity-template-db:
     command: postgres -c logging_collector=on -c log_destination=stderr
     image: postgres:11
     container_name: protocol-identity-template-db
     restart: always
-    env_file:
-      - services/identity_template_db/test.env
     networks:
       - agency-network
     depends_on:
       - aries-key-guardian
     tty: true
+    environment:
+      - POSTGRES_HOST=protocol-identity-template-db
+      - POSTGRES_DB=identitytemplatedb
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=dbpass
 
   protocol-identity-wallet-db:
     image: postgres:11
@@ -95,33 +106,49 @@ services:
     command: postgres -c logging_collector=on -c log_destination=stderr
     volumes:
       - ./services/identity_wallet_db/create_scripts:/docker-entrypoint-initdb.d/
-    env_file:
-      - services/identity_wallet_db/test.env
     networks:
       - agency-network
     depends_on:
       - aries-guardianship-agency
     tty: true
+    environment:
+      - POSTGRES_HOST=protocol-identity-wallet-db
+      - POSTGRES_DB=wallets
+      - POSTGRES_PASSWORD=dbpass
+      - POSTGRES_USER=postgres
 
   protocol-bio-auth-service:
     image: "kivaprotocol/bioauth:0.0.21"
     container_name: protocol-bio-auth-service
     ports:
       - "8081:8080"
-    env_file:
-      - services/bio_auth_service/test.env
     networks:
       - agency-network
     depends_on:
       - protocol-identity-template-db
     tty: true
+    environment:
+      - POSTGRES_HOST=protocol-identity-template-db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=identitytemplatedb
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=dbpass
+      - DD_TRACE_ENABLED=false
+      - DD_SERVICE_NAME=bio_auth_service
+      - DD_AGENT_HOST=localhost
+      - DD_TRACE_AGENT_PORT=8126
+      - DD_TRACE_REPORT_HOSTNAME=true
+      - BIOANALYZER_ENABLED=true
+      - BIOANALYZER_SERVICE_URL=http://protocol-bioanalyzer-service:8080
+      - BIOANALYZER_QUALITY_THRESHOLD=30
+      - REPLAY_ATTACK_ENABLED=false
+      - MAX_DIDS=100
+      - HASH_PEPPER=SOME_PEPPER
 
   protocol-bioanalyzer-service:
     image: "kivaprotocol/bioanalyzer:0.0.21"
     container_name: protocol-bioanalyzer-service
     working_dir: /app
-    env_file:
-        - services/bioanalyzer_service/test.env
     ports:
         - "8089:8080"
     networks:
@@ -129,13 +156,17 @@ services:
     depends_on:
         - protocol-bio-auth-service
     tty: true
+    environment:
+      - DD_TRACE_ENABLED=false
+      - DD_SERVICE_NAME=bioanalyzer
+      - DD_AGENT_HOST=localhost
+      - DD_TRACE_AGENT_PORT=8126
+      - DD_TRACE_REPORT_HOSTNAME=true
 
   aries-guardianship-agency:
     image: "kivaprotocol/aries-guardianship-agency:0.0.50"
     container_name: aries-guardianship-agency
     working_dir: /www
-    env_file:
-      - services/aries_guardianship_agency/test.env
     ports:
       - "3010:3010"
     expose:
@@ -148,13 +179,47 @@ services:
       - protocol-indy-pool
     tty: true
     privileged: true
+    environment:
+      - NODE_ENV=LOCAL
+      - PUBLIC_URL=http://protocol-gateway:8080
+      - WALLET_DB_HOST=protocol-identity-wallet-db
+      - WALLET_DB_PORT=5432
+      - WALLET_DB_USER=postgres
+      - WALLET_DB_PASS=dbpass
+      - WALLET_DB_ADMIN_USER=postgres
+      - WALLET_DB_ADMIN_PASS=dbpass
+      - POSTGRES_PASSWORD=dbpass
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=wallets
+      - GENESIS_URL=http://localhost:9000/genesis
+      - STORAGE_PATH=/tmp/tails-files
+      - LOG_LEVEL=INFO
+      - TAILS_URL=http://tails-server:6543
+      - ACAPY_OUTBOUND_TRANSPORT=http
+      - ACAPY_ADMIN=[0.0.0.0,3021]
+      - ACAPY_ENDPOINT=http://multitenant:3020
+      - ACAPY_WEBHOOK_URL=http://aries-guardianship-agency:3010/v1/controller/multitenant
+      - ACAPY_ADMIN_API_KEY=adminApiKey
+      - ACAPY_LABEL=multitenant
+      - ACAPY_WALLET_NAME=multitenant_name
+      - ACAPY_WALLET_KEY=multitenant_key
+      - ACAPY_WALLET_TYPE=indy
+      - ACAPY_WALLET_STORAGE_TYPE=postgres_storage
+      - ACAPY_WALLET_SEED=0000000000000000000000000000Any1
+      - ACAPY_WALLET_STORAGE_CONFIG={"url":"wallets-db:5432","wallet_scheme":"MultiWalletSingleTable"}
+      - ACAPY_WALLET_STORAGE_CREDS={"account":"postgres","password":"dbpass","admin_account":"postgres","admin_password":"dbpass"}
+      - ACAPY_GENESIS_FILE=/home/indy/resources/pool_transactions_genesis_local_dev
+      - ACAPY_WALLET_LOCAL_DID=true
+      - ACAPY_LOG_LEVEL=info
+      - ACAPY_AUTO_PROVISION=true
+      - ACAPY_MULTITENANT=true
+      - ACAPY_MULTITENANT_ADMIN=true
+      - ACAPY_MULTITENANT_JWT_SECRET=jwtSecret
 
   aries-key-guardian:
       image: "kivaprotocol/aries-key-guardian:0.0.30"
     container_name: aries-key-guardian
     working_dir: /www
-    env_file:
-      - services/aries-key-guardian/test.env
     ports:
       - "3005:3003"
     expose:
@@ -164,13 +229,22 @@ services:
     tty: true
     depends_on:
       - protocol-auth-db
+    environment:
+      - TWILIO_ACCOUNT_SID=AC4c944d33cecb06a9ec4cd9ef5495ee26
+      - TWILIO_AUTH_TOKEN=94a71d617ae8214bd37b3b9b9a3d9c5f
+      - TWILIO_PHONE_NUMBER=+15005550006
+      - NODE_ENV=LOCAL
+      - HASH_PEPPER=SOME_PEPPER
+      - POSTGRES_DB=authdb
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=dbpass
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=protocol-auth-db
 
   kiva-controller:
     image: "kivaprotocol/kiva-controller:0.0.47"
     container_name: kiva-controller
     working_dir: /www
-    env_file:
-      - services/kiva_controller/test.env
     ports:
       - "3011:3011"
     expose:
@@ -180,13 +254,19 @@ services:
     tty: true
     depends_on:
       - aries-key-guardian
+    environment:
+      - NODE_ENV=LOCAL
+      - PORT=3011
+      - SELF_URL=http://kiva-controller:3011
+      - WALLET_ID=kivaWalletId
+      - WALLET_KEY=kivaWalletKey
+      - ADMIN_API_KEY=kivaApiKey
+      - SEED=000000000000000000000000Steward1
 
   fsp-controller:
     image: "kivaprotocol/fsp-controller:0.0.47"
     container_name: fsp-controller
     working_dir: /www
-    env_file:
-      - services/fsp_controller/test.env
     ports:
       - "3013:3013"
     expose:
@@ -196,13 +276,26 @@ services:
     tty: true
     depends_on:
       - protocol-identity-db
+    environment:
+      - NODE_ENV=LOCAL
+      - PORT=3013
+      - SELF_URL=http://fsp-controller:3013
+      - WALLET_ID=fspWalletId
+      - WALLET_KEY=fspWalletKey
+      - ADMIN_API_KEY=fspApiKey
+      - SEED=0000000000000000000000000000fsp1
+      - AUTH0_ALGORITHM=RS256
+      - AUTH0_DOMAIN=kiva-protocol-standalone.auth0.com
+      - POSTGRES_HOST=protocol-identity-db
+      - POSTGRES_DB=identitydb
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=dbpass
 
   demo-controller:
     image: "kivaprotocol/demo-controller:0.0.42"
     container_name: demo-controller
     working_dir: /www
-    env_file:
-      - services/demo_controller/test.env
     ports:
       - "3014:3014"
     expose:
@@ -212,6 +305,16 @@ services:
     tty: true
     depends_on:
       - fsp-controller
+    environment:
+      - NODE_ENV=LOCAL
+      - PORT=3014
+      - SELF_URL=http://demo-controller:3014
+      - WALLET_ID=demoWalletId
+      - WALLET_KEY=demoWalletKey
+      - ADMIN_API_KEY=demoApiKey
+      - SEED=000000000000000000000000Steward2
+      - AUTH0_ALGORITHM=RS256
+      - AUTH0_DOMAIN=kiva-protocol-standalone.auth0.com
  
   tails-server:
     image: kivaprotocol/tails-server:latest
@@ -252,8 +355,6 @@ services:
     expose: 
       - "3020"
       - "3021"
-    env_file:
-      - services/multitenant/test.env
     # Have multitenant wait a few seconds until indy ledger is up
     # Also for some reason inbound transport doesn't work via env args so using commmand line here
     entrypoint: /bin/bash
@@ -263,3 +364,24 @@ services:
       aca-py start \
       --inbound-transport http '0.0.0.0' 3020"
     ]
+    environment:
+      - ACAPY_OUTBOUND_TRANSPORT=http
+      - ACAPY_ADMIN=[0.0.0.0,3021]
+      - ACAPY_ENDPOINT=http://protocol-gateway:8080/v2/multitenant
+      - ACAPY_WEBHOOK_URL=http://aries-guardianship-agency:3010/v1/controller/multitenant
+      - ACAPY_ADMIN_API_KEY=adminApiKey
+      - ACAPY_LABEL=multitenant
+      - ACAPY_WALLET_NAME=multitenant_name
+      - ACAPY_WALLET_KEY=multitenant_key
+      - ACAPY_WALLET_TYPE=indy
+      - ACAPY_WALLET_STORAGE_TYPE=postgres_storage
+      - ACAPY_WALLET_SEED=0000000000000000000000000000Any1
+      - ACAPY_WALLET_STORAGE_CONFIG={"url":"protocol-identity-wallet-db:5432","wallet_scheme":"MultiWalletSingleTable"}
+      - ACAPY_WALLET_STORAGE_CREDS={"account":"postgres","password":"dbpass","admin_account":"postgres","admin_password":"dbpass"}
+      - ACAPY_GENESIS_URL=http://aries-guardianship-agency:3010/genesis-file
+      - ACAPY_WALLET_LOCAL_DID=true
+      - ACAPY_LOG_LEVEL=info
+      - ACAPY_AUTO_PROVISION=true
+      - ACAPY_MULTITENANT=true
+      - ACAPY_MULTITENANT_ADMIN=true
+      - ACAPY_MULTITENANT_JWT_SECRET=jwtSecret
