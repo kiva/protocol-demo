@@ -14,8 +14,8 @@ services:
   # indy pool needs a static ip configured in the pool_transactions_genesis so need to start it first
   protocol-indy-pool:
     build:
-      context: services/indy_pool
-      dockerfile: indy-pool-kiva.dockerfile
+      context: .
+      dockerfile: resources/indy-pool.dockerfile
       args:
         pool_ip: '10.0.0.2'
     image: protocol-indy-pool
@@ -105,7 +105,7 @@ services:
     container_name: protocol-identity-wallet-db
     command: postgres -c logging_collector=on -c log_destination=stderr
     volumes:
-      - ./services/identity_wallet_db/create_scripts:/docker-entrypoint-initdb.d/
+      - ./resources/identity_wallet:/docker-entrypoint-initdb.d/
     networks:
       - agency-network
     depends_on:
