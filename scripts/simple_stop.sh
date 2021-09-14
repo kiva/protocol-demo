@@ -1,7 +1,7 @@
 #!/bin/bash
 # Run from protocol-demo
 # Stops all the containers
-set -ev
+set -v
 
 docker-compose -f docker-compose.yml down
 # Stop all running agents
