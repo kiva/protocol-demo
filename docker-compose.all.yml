@@ -242,7 +242,7 @@ services:
       - POSTGRES_HOST=protocol-auth-db
 
   kiva-controller:
-    image: "kivaprotocol/kiva-controller:0.0.47"
+    image: "kivaprotocol/kiva-controller:0.0.49"
     container_name: kiva-controller
     working_dir: /www
     ports:
@@ -264,7 +264,7 @@ services:
       - SEED=000000000000000000000000Steward1
 
   fsp-controller:
-    image: "kivaprotocol/fsp-controller:0.0.47"
+    image: "kivaprotocol/fsp-controller:0.0.49"
     container_name: fsp-controller
     working_dir: /www
     ports:
@@ -293,7 +293,7 @@ services:
       - POSTGRES_PASSWORD=dbpass
 
   demo-controller:
-    image: "kivaprotocol/demo-controller:0.0.42"
+    image: "kivaprotocol/aries-controller:1.0.76"
     container_name: demo-controller
     working_dir: /www
     ports:
