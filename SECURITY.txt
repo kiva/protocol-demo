@@ -1,9 +1,9 @@
 For all security issues related specifically to the code in this repo please email: protocol-security@kiva.org
 
-Please include all relevant details as appropriate. For example the following would be useful to include where possible: a detailed description of the vulnerability, a link to any existing CVE, a proof of concept for an exploit that targets this repo specifically, any proposed fixes, and / or additional resources for understanding similar vulnerabilities.
+Please include all relevant details, as appropriate. For example, the following would be useful to include where possible: a detailed description of the vulnerability, a link to any existing CVE, a proof of concept for an exploit that targets this repo specifically, any proposed fixes, and / or additional resources for understanding similar vulnerabilities.
 
-Our policy is to discuss responsible disclosure on a case by case basis in collaboration with security researchers to determine an appropriate plan of action for each reported issue.
+Our policy when we recieve a report of a security issue is to respond to it within a reasonable time period in order to work with the reporting parties to come up with an agreeable plan and timeline to mitigate, patch and disclose each of the security issues raised on a case by case basis.
 
-For non-security issues please raise a github issue in the relevant repo.
+For non-security issues, please raise a GitHub issue in the relevant repo.
 
-For issues related to other repos (e.g. our dependencies) where there are not existing fixes or workarounds, please report to those repo owners as appropriate.
+For issues related to other repos (e.g. our dependencies) where there are not existing fixes or workarounds, please file a report (or reports) to the owners of those repos following the guidelines that they have set forth.
