@@ -13,7 +13,6 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
     const agencyUrl = 'http://localhost:3010';
     let connectionData: any;
     let demoConnectionId: string;
-    let credentialExchangeId: string;
     let presExId: string;
 
     beforeAll(() => {
@@ -41,21 +40,21 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
     // So don't worry if that's the case, in CI it will only ever run once.
     it('Register test agent in multi controller', async () => {
         const data = {
-            "seed": "000000000000000000000000Steward2", // Register as steward to make setup simpler
-            "label": "Test Controller",
-            "useTailsServer": false,
-            "adminApiKey": "testAdminApiKey"
-        }
+            'seed': '000000000000000000000000Steward2', // Register as steward to make setup simpler
+            'label': 'Test Controller',
+            'useTailsServer': false,
+            'adminApiKey': 'testAdminApiKey'
+        };
         return request(demoUrl)
             .post('/v2/api/agent/register')
             .set('agent', 'test-agent')
             .send(data)
             .expect((res) => {
                 try {
-                    
+
                     expect(res.body.agentId).toBeDefined();
                 } catch (e) {
-                    e.message = e.message + '\nDetails: ' + inspect(res.body);
+                    e.message = `${e.message as string}\nDetails: ${inspect(res.body)}`;
                     throw e;
                 }
             });
@@ -64,7 +63,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
     it('Demo agent publicizes DID', async () => {
         await ProtocolUtility.delay(5000);
         const data = {
-            "did": "EbP4aYNeTHL6q385GuVpRV",
+            'did': 'EbP4aYNeTHL6q385GuVpRV',
         };
         return request(demoUrl)
             .post('/v1/agent/publicize-did')
@@ -75,22 +74,22 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
                     expect(res.status).toBe(201);
                     expect(res.body.result).toBeDefined();
                 } catch (e) {
-                    e.message = e.message + '\nDetails: ' + inspect(res.body);
+                    e.message = `${e.message as string}\nDetails: ${inspect(res.body)}`;
                     throw e;
-                }  
+                }
             });
     });
 
     it('Test agent creates schema and cred def', async () => {
         await ProtocolUtility.delay(1000);
         const data = {
-            "schemaName": "test",
-            "attributes": [
-                "nationalId",
-                "firstName",
-                "lastName",
-                "birthDate",
-                "photo~attach"
+            'schemaName': 'test',
+            'attributes': [
+                'nationalId',
+                'firstName',
+                'lastName',
+                'birthDate',
+                'photo~attach'
             ]
         };
         return request(demoUrl)
@@ -139,7 +138,8 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
                 firstName: 'First',
                 lastName: 'Last',
                 birthDate: '1975-10-10 00:00:00',
-                'photo~attach': '89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d4944415478da6364f8ffbf1e000584027fc25b1e2a00000000',
+                'photo~attach':
+                    '89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d4944415478da6364f8ffbf1e000584027fc25b1e2a00000000',
             },
             connectionId: demoConnectionId,
             profile: 'test.cred.def.json'
@@ -153,9 +153,8 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
                     expect(res.status).toBe(201);
                     expect(res.body.state).toBe('offer_sent');
                     expect(res.body.credential_exchange_id).toBeDefined();
-                    credentialExchangeId = res.body.credential_exchange_id;
                 } catch (e) {
-                    e.message = e.message + '\nDetails: ' + inspect(res.body);
+                    e.message = `${e.message as string}\nDetails: ${inspect(res.body)}`;
                     throw e;
                 }
             });
@@ -182,7 +181,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
                     'requested_predicates':{}
                 }
             }
-        }
+        };
         return request(demoUrl)
             .post('/v2/api/profiles')
             .set('agent', 'test-agent')
@@ -199,7 +198,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
             profile: 'test.proof.request.json',
         };
         return request(demoUrl)
-            .post(`/v2/api/verify`)
+            .post('/v2/api/verify')
             .set('agent', 'test-agent')
             .send(data)
             .expect((res) => {
@@ -209,7 +208,7 @@ describe('Full system eKYC integration tests for demo issue and verify flows', (
                     expect(res.body.presentation_exchange_id).toBeDefined();
                     presExId = res.body.presentation_exchange_id;
                 } catch (e) {
-                    e.message = e.message + '\nDetails: ' + inspect(res.body);
+                    e.message = `${e.message as string}\nDetails: ${inspect(res.body)}`;
                     throw e;
                 }
             });
